@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Recrutement_EAR">
+        <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="Recrutement_EJB_Client.jar" deploy-path="/lib" handle="module:/resource/Recrutement_EJB_Client/Recrutement_EJB_Client">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Recrutement_EJB.jar" deploy-path="/" handle="module:/resource/Recrutement_EJB/Recrutement_EJB">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Recrutement_JPA.jar" deploy-path="/lib" handle="module:/resource/Recrutement_JPA/Recrutement_JPA">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
