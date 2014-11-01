@@ -3,7 +3,6 @@ package eu.telecom_bretagne.recrutement.data.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -16,24 +15,26 @@ public class Entretien implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="ENTRETIEN_ID_GENERATOR", sequenceName=" ENTRETIEN_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ENTRETIEN_ID_GENERATOR")
 	private Integer id;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="date_entretien")
 	private Date dateEntretien;
 
-	//bi-directional many-to-many association to Candidature
-	@ManyToMany(mappedBy="entretiens")
-	private List<Candidature> candidatures;
-
-	//bi-directional many-to-many association to ComiteEntretien
-	@ManyToMany(mappedBy="entretiens")
-	private List<ComiteEntretien> comiteEntretiens;
-
-	//bi-directional many-to-one association to Vote
+	//bi-directional many-to-one association to Candidature
 	@ManyToOne
-	@JoinColumn(name="id_vote")
+	@JoinColumn(name="id_candidature")
+	private Candidature candidature;
+
+	//bi-directional many-to-one association to ComiteEntretien
+	@ManyToOne
+	@JoinColumn(name="id_comite_entretien")
+	private ComiteEntretien comiteEntretien;
+
+	//bi-directional one-to-one association to Vote
+	@OneToOne(mappedBy="entretien")
 	private Vote vote;
 
 	public Entretien() {
@@ -55,20 +56,20 @@ public class Entretien implements Serializable {
 		this.dateEntretien = dateEntretien;
 	}
 
-	public List<Candidature> getCandidatures() {
-		return this.candidatures;
+	public Candidature getCandidature() {
+		return this.candidature;
 	}
 
-	public void setCandidatures(List<Candidature> candidatures) {
-		this.candidatures = candidatures;
+	public void setCandidature(Candidature candidature) {
+		this.candidature = candidature;
 	}
 
-	public List<ComiteEntretien> getComiteEntretiens() {
-		return this.comiteEntretiens;
+	public ComiteEntretien getComiteEntretien() {
+		return this.comiteEntretien;
 	}
 
-	public void setComiteEntretiens(List<ComiteEntretien> comiteEntretiens) {
-		this.comiteEntretiens = comiteEntretiens;
+	public void setComiteEntretien(ComiteEntretien comiteEntretien) {
+		this.comiteEntretien = comiteEntretien;
 	}
 
 	public Vote getVote() {

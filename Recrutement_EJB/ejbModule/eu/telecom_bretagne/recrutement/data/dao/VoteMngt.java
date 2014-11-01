@@ -1,5 +1,8 @@
 package eu.telecom_bretagne.recrutement.data.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
@@ -18,6 +21,10 @@ public class VoteMngt implements DAO<Vote> {
 	
 	public Vote findById (int id) {
 		return new Vote();
+	}
+	
+	public List <Vote> findAll() {
+		return new ArrayList<Vote>();
 	}
 	
 	public Vote update (Vote entity) {

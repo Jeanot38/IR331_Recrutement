@@ -1,6 +1,7 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -15,22 +16,15 @@ public class ServiceRh implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="SERVICE_RH_ID_GENERATOR", sequenceName=" SERVICE_RH_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SERVICE_RH_ID_GENERATOR")
 	private Integer id;
 
 	private String localisation;
 
-	private String login;
-
-	private String nom;
-
-	private String password;
-
-	private String prenom;
-
 	//bi-directional one-to-one association to Utilisateur
 	@OneToOne
-	@JoinColumn(name="id")
+	@PrimaryKeyJoinColumn(name="id")
 	private Utilisateur utilisateur;
 
 	public ServiceRh() {
@@ -50,38 +44,6 @@ public class ServiceRh implements Serializable {
 
 	public void setLocalisation(String localisation) {
 		this.localisation = localisation;
-	}
-
-	public String getLogin() {
-		return this.login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getNom() {
-		return this.nom;
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getPrenom() {
-		return this.prenom;
-	}
-
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
 	}
 
 	public Utilisateur getUtilisateur() {

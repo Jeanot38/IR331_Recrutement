@@ -3,7 +3,6 @@ package eu.telecom_bretagne.recrutement.data.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -16,7 +15,8 @@ public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="MESSAGE_ID_GENERATOR", sequenceName=" MESSAGE_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MESSAGE_ID_GENERATOR")
 	private Integer id;
 
 	private String contenu;
@@ -27,9 +27,10 @@ public class Message implements Serializable {
 
 	private String sujet;
 
-	//bi-directional many-to-many association to Candidat
-	@ManyToMany(mappedBy="messages")
-	private List<Candidat> candidats;
+	//bi-directional many-to-one association to Candidat
+	@ManyToOne
+	@JoinColumn(name="id_candidat")
+	private Candidat candidat;
 
 	public Message() {
 	}
@@ -66,12 +67,12 @@ public class Message implements Serializable {
 		this.sujet = sujet;
 	}
 
-	public List<Candidat> getCandidats() {
-		return this.candidats;
+	public Candidat getCandidat() {
+		return this.candidat;
 	}
 
-	public void setCandidats(List<Candidat> candidats) {
-		this.candidats = candidats;
+	public void setCandidat(Candidat candidat) {
+		this.candidat = candidat;
 	}
 
 }

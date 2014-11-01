@@ -3,8 +3,8 @@
 	<name>Recrutement_EJB</name>
 	<comment></comment>
 	<projects>
-		<project>Recrutement_DAO</project>
-		<project>Recrutement_EJB_Client</project>
+		<project>Recrutement_EJB_client</project>
+		<project>Recrutement_JPA</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,8 +1,8 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -15,16 +15,18 @@ public class Vote implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="VOTE_ID_GENERATOR", sequenceName=" VOTE_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="VOTE_ID_GENERATOR")
 	private Integer id;
 
 	private String commentaires;
 
 	private Integer note;
 
-	//bi-directional many-to-one association to Entretien
-	@OneToMany(mappedBy="vote")
-	private List<Entretien> entretiens;
+	//bi-directional one-to-one association to Entretien
+	@OneToOne
+	@PrimaryKeyJoinColumn(name="id")
+	private Entretien entretien;
 
 	public Vote() {
 	}
@@ -53,26 +55,12 @@ public class Vote implements Serializable {
 		this.note = note;
 	}
 
-	public List<Entretien> getEntretiens() {
-		return this.entretiens;
+	public Entretien getEntretien() {
+		return this.entretien;
 	}
 
-	public void setEntretiens(List<Entretien> entretiens) {
-		this.entretiens = entretiens;
-	}
-
-	public Entretien addEntretien(Entretien entretien) {
-		getEntretiens().add(entretien);
-		entretien.setVote(this);
-
-		return entretien;
-	}
-
-	public Entretien removeEntretien(Entretien entretien) {
-		getEntretiens().remove(entretien);
-		entretien.setVote(null);
-
-		return entretien;
+	public void setEntretien(Entretien entretien) {
+		this.entretien = entretien;
 	}
 
 }

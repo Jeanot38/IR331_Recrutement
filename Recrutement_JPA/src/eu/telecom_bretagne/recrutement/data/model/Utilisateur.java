@@ -2,7 +2,7 @@ package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -15,7 +15,8 @@ public class Utilisateur implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="UTILISATEUR_ID_GENERATOR", sequenceName=" UTILISATEUR_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="UTILISATEUR_ID_GENERATOR")
 	private Integer id;
 
 	private String login;
@@ -32,7 +33,7 @@ public class Utilisateur implements Serializable {
 
 	//bi-directional many-to-one association to ComiteEntretien
 	@OneToMany(mappedBy="utilisateur")
-	private List<ComiteEntretien> comiteEntretiens;
+	private Set<ComiteEntretien> comiteEntretiens;
 
 	//bi-directional one-to-one association to Directeur
 	@OneToOne(mappedBy="utilisateur")
@@ -93,11 +94,11 @@ public class Utilisateur implements Serializable {
 		this.candidat = candidat;
 	}
 
-	public List<ComiteEntretien> getComiteEntretiens() {
+	public Set<ComiteEntretien> getComiteEntretiens() {
 		return this.comiteEntretiens;
 	}
 
-	public void setComiteEntretiens(List<ComiteEntretien> comiteEntretiens) {
+	public void setComiteEntretiens(Set<ComiteEntretien> comiteEntretiens) {
 		this.comiteEntretiens = comiteEntretiens;
 	}
 

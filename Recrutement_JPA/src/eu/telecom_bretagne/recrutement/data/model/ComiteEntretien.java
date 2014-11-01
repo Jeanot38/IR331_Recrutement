@@ -2,7 +2,7 @@ package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -16,7 +16,8 @@ public class ComiteEntretien implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="COMITE_ENTRETIEN_ID_GENERATOR", sequenceName=" COMITE_ENTRETIEN_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="COMITE_ENTRETIEN_ID_GENERATOR")
 	private Integer id;
 
 	//bi-directional many-to-one association to Utilisateur
@@ -24,18 +25,9 @@ public class ComiteEntretien implements Serializable {
 	@JoinColumn(name="membres")
 	private Utilisateur utilisateur;
 
-	//bi-directional many-to-many association to Entretien
-	@ManyToMany
-	@JoinTable(
-		name="comite_entretien_entretien"
-		, joinColumns={
-			@JoinColumn(name="id_comite_entretien")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="id_entretien")
-			}
-		)
-	private List<Entretien> entretiens;
+	//bi-directional many-to-one association to Entretien
+	@OneToMany(mappedBy="comiteEntretien")
+	private Set<Entretien> entretiens;
 
 	public ComiteEntretien() {
 	}
@@ -56,12 +48,26 @@ public class ComiteEntretien implements Serializable {
 		this.utilisateur = utilisateur;
 	}
 
-	public List<Entretien> getEntretiens() {
+	public Set<Entretien> getEntretiens() {
 		return this.entretiens;
 	}
 
-	public void setEntretiens(List<Entretien> entretiens) {
+	public void setEntretiens(Set<Entretien> entretiens) {
 		this.entretiens = entretiens;
+	}
+
+	public Entretien addEntretien(Entretien entretien) {
+		getEntretiens().add(entretien);
+		entretien.setComiteEntretien(this);
+
+		return entretien;
+	}
+
+	public Entretien removeEntretien(Entretien entretien) {
+		getEntretiens().remove(entretien);
+		entretien.setComiteEntretien(null);
+
+		return entretien;
 	}
 
 }

@@ -3,9 +3,10 @@
 	<name>Recrutement_EAR</name>
 	<comment></comment>
 	<projects>
-		<project>Recrutement_EJB_Client</project>
 		<project>Recrutement_EJB</project>
 		<project>Recrutement_JPA</project>
+		<project>Recrutement_EJB_client</project>
+		<project>Recrutement_WEB</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

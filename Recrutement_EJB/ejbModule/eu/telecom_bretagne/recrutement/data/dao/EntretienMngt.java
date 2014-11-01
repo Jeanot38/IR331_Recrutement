@@ -1,5 +1,8 @@
 package eu.telecom_bretagne.recrutement.data.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
@@ -18,6 +21,10 @@ public class EntretienMngt implements DAO<Entretien> {
 	
 	public Entretien findById (int id) {
 		return new Entretien();
+	}
+	
+	public List <Entretien> findAll() {
+		return new ArrayList<Entretien>();
 	}
 	
 	public Entretien update (Entretien entity) {

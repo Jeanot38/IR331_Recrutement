@@ -2,7 +2,7 @@ package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -15,51 +15,26 @@ public class Candidat implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="CANDIDAT_ID_GENERATOR", sequenceName=" CANDIDAT_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CANDIDAT_ID_GENERATOR")
 	private Integer id;
 
 	private String addresse;
-
-	private String login;
-
-	private String nom;
-
-	private String password;
-
-	private String prenom;
 
 	private String telephone;
 
 	//bi-directional one-to-one association to Utilisateur
 	@OneToOne
-	@JoinColumn(name="id")
+	@PrimaryKeyJoinColumn(name="id")
 	private Utilisateur utilisateur;
 
-	//bi-directional many-to-many association to Candidature
-	@ManyToMany
-	@JoinTable(
-		name="candidat_candidature"
-		, joinColumns={
-			@JoinColumn(name="id_candidat")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="id_candidature")
-			}
-		)
-	private List<Candidature> candidatures;
+	//bi-directional many-to-one association to Candidature
+	@OneToMany(mappedBy="candidat")
+	private Set<Candidature> candidatures;
 
-	//bi-directional many-to-many association to Message
-	@ManyToMany
-	@JoinTable(
-		name="candidat_message"
-		, joinColumns={
-			@JoinColumn(name="id_candidat")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="id_message")
-			}
-		)
-	private List<Message> messages;
+	//bi-directional many-to-one association to Message
+	@OneToMany(mappedBy="candidat")
+	private Set<Message> messages;
 
 	public Candidat() {
 	}
@@ -80,38 +55,6 @@ public class Candidat implements Serializable {
 		this.addresse = addresse;
 	}
 
-	public String getLogin() {
-		return this.login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getNom() {
-		return this.nom;
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getPrenom() {
-		return this.prenom;
-	}
-
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
-
 	public String getTelephone() {
 		return this.telephone;
 	}
@@ -128,20 +71,48 @@ public class Candidat implements Serializable {
 		this.utilisateur = utilisateur;
 	}
 
-	public List<Candidature> getCandidatures() {
+	public Set<Candidature> getCandidatures() {
 		return this.candidatures;
 	}
 
-	public void setCandidatures(List<Candidature> candidatures) {
+	public void setCandidatures(Set<Candidature> candidatures) {
 		this.candidatures = candidatures;
 	}
 
-	public List<Message> getMessages() {
+	public Candidature addCandidature(Candidature candidature) {
+		getCandidatures().add(candidature);
+		candidature.setCandidat(this);
+
+		return candidature;
+	}
+
+	public Candidature removeCandidature(Candidature candidature) {
+		getCandidatures().remove(candidature);
+		candidature.setCandidat(null);
+
+		return candidature;
+	}
+
+	public Set<Message> getMessages() {
 		return this.messages;
 	}
 
-	public void setMessages(List<Message> messages) {
+	public void setMessages(Set<Message> messages) {
 		this.messages = messages;
+	}
+
+	public Message addMessage(Message message) {
+		getMessages().add(message);
+		message.setCandidat(this);
+
+		return message;
+	}
+
+	public Message removeMessage(Message message) {
+		getMessages().remove(message);
+		message.setCandidat(null);
+
+		return message;
 	}
 
 }
