@@ -2,8 +2,8 @@ package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -16,15 +16,16 @@ public class Candidature implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="CANDIDATURE_ID_GENERATOR", sequenceName=" CANDIDATURE_ID_SEQ")
+	@SequenceGenerator(name="CANDIDATURE_ID_GENERATOR", sequenceName=" CANDIDATURE_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CANDIDATURE_ID_GENERATOR")
 	private Integer id;
 
 	private String cv;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="date_creation")
-	private Date dateCreation;
+	private Timestamp dateCreation;
+
+	private String etat;
 
 	@Column(name="lettre_motivation")
 	private String lettreMotivation;
@@ -36,7 +37,7 @@ public class Candidature implements Serializable {
 
 	//bi-directional many-to-one association to Entretien
 	@OneToMany(mappedBy="candidature")
-	private Set<Entretien> entretiens;
+	private List<Entretien> entretiens;
 
 	public Candidature() {
 	}
@@ -57,12 +58,20 @@ public class Candidature implements Serializable {
 		this.cv = cv;
 	}
 
-	public Date getDateCreation() {
+	public Timestamp getDateCreation() {
 		return this.dateCreation;
 	}
 
-	public void setDateCreation(Date dateCreation) {
+	public void setDateCreation(Timestamp dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+
+	public String getEtat() {
+		return this.etat;
+	}
+
+	public void setEtat(String etat) {
+		this.etat = etat;
 	}
 
 	public String getLettreMotivation() {
@@ -81,11 +90,11 @@ public class Candidature implements Serializable {
 		this.candidat = candidat;
 	}
 
-	public Set<Entretien> getEntretiens() {
+	public List<Entretien> getEntretiens() {
 		return this.entretiens;
 	}
 
-	public void setEntretiens(Set<Entretien> entretiens) {
+	public void setEntretiens(List<Entretien> entretiens) {
 		this.entretiens = entretiens;
 	}
 

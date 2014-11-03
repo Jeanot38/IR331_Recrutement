@@ -14,9 +14,10 @@ CREATE TABLE candidat(
 
 CREATE TABLE candidature(
   id			serial	PRIMARY KEY,
-  date_creation		date,
+  date_creation		timestamp,
   cv			text,
   lettre_motivation	text,
+  etat			text,
   id_candidat		serial references candidat(id)
 );
 
@@ -33,12 +34,13 @@ CREATE TABLE directeur(
 
 CREATE TABLE comite_entretien(
   id			serial PRIMARY KEY,
-  membres		integer	references utilisateur(id)
+  membres		text
 );
 
 CREATE TABLE entretien(
   id			serial	PRIMARY KEY,
-  date_entretien	date,
+  date_entretien	timestamp,
+  etat			text,
   id_candidature	serial	references candidature(id),
   id_comite_entretien	serial	references comite_entretien(id)
 );
@@ -51,7 +53,7 @@ CREATE TABLE vote(
 
 CREATE TABLE message(
   id			serial	PRIMARY KEY,
-  date_creation		date,
+  date_creation		timestamp,
   sujet			text,
   contenu		text,
   id_candidat		serial	references candidat(id)

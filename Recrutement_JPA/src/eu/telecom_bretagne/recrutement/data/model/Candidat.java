@@ -2,7 +2,7 @@ package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -15,7 +15,7 @@ public class Candidat implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="CANDIDAT_ID_GENERATOR", sequenceName=" CANDIDAT_ID_SEQ")
+	@SequenceGenerator(name="CANDIDAT_ID_GENERATOR", sequenceName=" CANDIDAT_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CANDIDAT_ID_GENERATOR")
 	private Integer id;
 
@@ -30,11 +30,11 @@ public class Candidat implements Serializable {
 
 	//bi-directional many-to-one association to Candidature
 	@OneToMany(mappedBy="candidat")
-	private Set<Candidature> candidatures;
+	private List<Candidature> candidatures;
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="candidat")
-	private Set<Message> messages;
+	private List<Message> messages;
 
 	public Candidat() {
 	}
@@ -71,11 +71,11 @@ public class Candidat implements Serializable {
 		this.utilisateur = utilisateur;
 	}
 
-	public Set<Candidature> getCandidatures() {
+	public List<Candidature> getCandidatures() {
 		return this.candidatures;
 	}
 
-	public void setCandidatures(Set<Candidature> candidatures) {
+	public void setCandidatures(List<Candidature> candidatures) {
 		this.candidatures = candidatures;
 	}
 
@@ -93,11 +93,11 @@ public class Candidat implements Serializable {
 		return candidature;
 	}
 
-	public Set<Message> getMessages() {
+	public List<Message> getMessages() {
 		return this.messages;
 	}
 
-	public void setMessages(Set<Message> messages) {
+	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
 
@@ -113,6 +113,28 @@ public class Candidat implements Serializable {
 		message.setCandidat(null);
 
 		return message;
+	}
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof Candidat)) {
+			return false;
+		}
+		
+		Candidat candidat = (Candidat) o;
+		
+		if(this.getAddresse() == null || !this.getAddresse().equals(candidat.getAddresse())) {
+			return false;
+		}
+		
+		if(this.getTelephone() == null || !this.getTelephone().equals(candidat.getTelephone())) {
+			return false;
+		}
+		
+		if(this.getTelephone() == null || !this.getUtilisateur().equals(candidat.getUtilisateur())) {
+			return false;
+		}
+		
+		return true;
 	}
 
 }

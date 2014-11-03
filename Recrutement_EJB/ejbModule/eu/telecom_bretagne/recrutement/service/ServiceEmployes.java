@@ -14,7 +14,7 @@ import eu.telecom_bretagne.recrutement.data.model.Candidature;
  */
 @Stateless
 @LocalBean
-public class Employes implements IDirecteur, IServiceRH, IComiteEntretien {
+public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceComiteEntretien {
 	
 	@EJB
 	CandidatureMngt candidatureDAO;
@@ -22,13 +22,8 @@ public class Employes implements IDirecteur, IServiceRH, IComiteEntretien {
     /**
      * Default constructor. 
      */
-    public Employes() {
+    public ServiceEmployes() {
         // TODO Auto-generated constructor stub
-    }
-    
-    @Override
-    public List <Candidature> getCandidatures() {
-    		return candidatureDAO.findAll();
     }
 
 }

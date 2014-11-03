@@ -1,5 +1,8 @@
+
 package eu.telecom_bretagne.recrutement.data.dao;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -9,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import eu.telecom_bretagne.recrutement.data.model.Candidature;
+import eu.telecom_bretagne.recrutement.exception.BadParameterException;
 
 /**
  * Session Bean implementation class CandidatureDAO
@@ -19,7 +23,25 @@ public class CandidatureMngt implements DAO<Candidature> {
 	@PersistenceContext
 	EntityManager em;
 
-	public Candidature create (Candidature entity) {
+	public Candidature create (Candidature entity) throws BadParameterException {
+		
+		if(entity.getCv() == null || entity.getCv() == "") {
+    		throw new BadParameterException("Le contenu du CV ne peut être nul");
+    	}
+    	
+    	if(entity.getLettreMotivation() == null || entity.getLettreMotivation() == "") {
+    		throw new BadParameterException("Le contenu de la lettre de motivation ne peut être nul");
+    	}
+    	
+    	if(entity.getCandidat() == null) {
+    		throw new BadParameterException("La candidature doit être lié à un candidat");
+    	}
+    	
+    	if(entity.getDateCreation() == null) {
+    		Date date= new Date();
+    		entity.setDateCreation(new Timestamp(date.getTime()));
+    	}
+    	
 		em.persist(entity);
 		return entity;		
 	}
@@ -35,7 +57,24 @@ public class CandidatureMngt implements DAO<Candidature> {
 		
 	}
 	
-	public Candidature update (Candidature entity) {
+	public Candidature update (Candidature entity) throws BadParameterException {
+		
+		if(entity.getCv() == null || entity.getCv() == "") {
+    		throw new BadParameterException("Le contenu du CV ne peut être nul");
+    	}
+    	
+    	if(entity.getLettreMotivation() == null || entity.getLettreMotivation() == "") {
+    		throw new BadParameterException("Le contenu de la lettre de motivation ne peut être nul");
+    	}
+    	
+    	if(entity.getCandidat() == null) {
+    		throw new BadParameterException("La candidature doit être lié à un candidat");
+    	}
+    	
+    	if(entity.getDateCreation() == null) {
+    		throw new BadParameterException("La date de création de la candidature doit être renseignée");
+    	}
+    	
 		return em.merge(entity);
 	}
 	

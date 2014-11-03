@@ -1,3 +1,5 @@
+<%@page import="eu.telecom_bretagne.recrutement.service.IServiceCandidats"%>
+<%@page import="eu.telecom_bretagne.recrutement.service.IServiceCommon"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
@@ -12,6 +14,8 @@
 
 <%
 IServiceRH serviceRH = GestionService.getServiceRH();
+IServiceCommon serviceCommon = GestionService.getServiceCommon();
+IServiceCandidats serviceCandidats = GestionService.getServiceCandidats();
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -21,9 +25,21 @@ IServiceRH serviceRH = GestionService.getServiceRH();
 <title>Voici une page de démo WEB</title>
 </head>
 <body>
+On affiche ici tous les candidats<br />
+<%
+List <Candidat> candidats = serviceCommon.getListCandidats();
+
+for(Candidat candidat : candidats) {
+%>
+Nom du candidat : <%= candidat.getAddresse() %><br />
+Prenom du candidat : <%=candidat.getTelephone() %><br /><br />
+
+<%
+} 
+%>
 On affiche ici l'ensemble des infos sur les candidatures : <br />
 <%
-List <Candidature> candidatures = serviceRH.getCandidatures();
+List <Candidature> candidatures = serviceCommon.getListCandidatures();
 
 if(candidatures.isEmpty()) {
 	out.print("Il n'y a aucune candidature dans la base de données");
