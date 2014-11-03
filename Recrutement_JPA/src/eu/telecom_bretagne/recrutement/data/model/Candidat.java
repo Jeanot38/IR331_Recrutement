@@ -29,7 +29,7 @@ public class Candidat implements Serializable {
 	private Utilisateur utilisateur;
 
 	//bi-directional many-to-one association to Candidature
-	@OneToMany(mappedBy="candidat")
+	@OneToMany(mappedBy="candidat", fetch=FetchType.EAGER)
 	private List<Candidature> candidatures;
 
 	//bi-directional many-to-one association to Message

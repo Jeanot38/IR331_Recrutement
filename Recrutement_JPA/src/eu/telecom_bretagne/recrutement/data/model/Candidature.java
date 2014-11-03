@@ -36,7 +36,7 @@ public class Candidature implements Serializable {
 	private Candidat candidat;
 
 	//bi-directional many-to-one association to Entretien
-	@OneToMany(mappedBy="candidature")
+	@OneToMany(mappedBy="candidature", fetch=FetchType.EAGER)
 	private List<Entretien> entretiens;
 
 	public Candidature() {

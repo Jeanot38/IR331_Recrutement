@@ -31,15 +31,15 @@ List <Candidat> candidats = serviceCommon.getListCandidats();
 
 for(Candidat candidat : candidats) {
 %>
-Nom du candidat : <%= candidat.getAddresse() %><br />
-Prenom du candidat : <%=candidat.getTelephone() %><br /><br />
+Nom du candidat : <%= candidat.getUtilisateur().getNom() %><br />
+Prenom du candidat : <%=candidat.getUtilisateur().getPrenom() %><br /><br />
 
 <%
 } 
 %>
 On affiche ici l'ensemble des infos sur les candidatures : <br />
 <%
-List <Candidature> candidatures = serviceCommon.getListCandidatures();
+List <Candidature> candidatures = candidats.get(0).getCandidatures();
 
 if(candidatures.isEmpty()) {
 	out.print("Il n'y a aucune candidature dans la base de données");

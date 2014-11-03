@@ -31,10 +31,6 @@ public class Utilisateur implements Serializable {
 	@OneToOne(mappedBy="utilisateur")
 	private Candidat candidat;
 
-	//bi-directional many-to-one association to ComiteEntretien
-	@OneToMany(mappedBy="utilisateur")
-	private List<ComiteEntretien> comiteEntretiens;
-
 	//bi-directional one-to-one association to Directeur
 	@OneToOne(mappedBy="utilisateur")
 	private Directeur directeur;
@@ -42,6 +38,19 @@ public class Utilisateur implements Serializable {
 	//bi-directional one-to-one association to ServiceRh
 	@OneToOne(mappedBy="utilisateur")
 	private ServiceRh serviceRh;
+
+	//bi-directional many-to-many association to ComiteEntretien
+	@ManyToMany
+	@JoinTable(
+		name="utilisateur_comite_entretien"
+		, joinColumns={
+			@JoinColumn(name="id_utilisateur")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="id_comite_entretien")
+			}
+		)
+	private List<ComiteEntretien> comiteEntretiens;
 
 	public Utilisateur() {
 	}
@@ -94,28 +103,6 @@ public class Utilisateur implements Serializable {
 		this.candidat = candidat;
 	}
 
-	public List<ComiteEntretien> getComiteEntretiens() {
-		return this.comiteEntretiens;
-	}
-
-	public void setComiteEntretiens(List<ComiteEntretien> comiteEntretiens) {
-		this.comiteEntretiens = comiteEntretiens;
-	}
-
-	public ComiteEntretien addComiteEntretien(ComiteEntretien comiteEntretien) {
-		getComiteEntretiens().add(comiteEntretien);
-		comiteEntretien.setUtilisateur(this);
-
-		return comiteEntretien;
-	}
-
-	public ComiteEntretien removeComiteEntretien(ComiteEntretien comiteEntretien) {
-		getComiteEntretiens().remove(comiteEntretien);
-		comiteEntretien.setUtilisateur(null);
-
-		return comiteEntretien;
-	}
-
 	public Directeur getDirecteur() {
 		return this.directeur;
 	}
@@ -130,6 +117,14 @@ public class Utilisateur implements Serializable {
 
 	public void setServiceRh(ServiceRh serviceRh) {
 		this.serviceRh = serviceRh;
+	}
+
+	public List<ComiteEntretien> getComiteEntretiens() {
+		return this.comiteEntretiens;
+	}
+
+	public void setComiteEntretiens(List<ComiteEntretien> comiteEntretiens) {
+		this.comiteEntretiens = comiteEntretiens;
 	}
 	
 	public boolean equals(Object o) {

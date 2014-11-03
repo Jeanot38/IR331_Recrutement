@@ -20,14 +20,15 @@ public class ComiteEntretien implements Serializable {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="COMITE_ENTRETIEN_ID_GENERATOR")
 	private Integer id;
 
-	//bi-directional many-to-one association to Utilisateur
-	@ManyToOne
-	@JoinColumn(name="membres")
-	private Utilisateur utilisateur;
+	private String membres;
 
 	//bi-directional many-to-one association to Entretien
-	@OneToMany(mappedBy="comiteEntretien")
+	@OneToMany(mappedBy="comiteEntretien", fetch=FetchType.EAGER)
 	private List<Entretien> entretiens;
+
+	//bi-directional many-to-many association to Utilisateur
+	@ManyToMany(mappedBy="comiteEntretiens")
+	private List<Utilisateur> utilisateurs;
 
 	public ComiteEntretien() {
 	}
@@ -40,12 +41,12 @@ public class ComiteEntretien implements Serializable {
 		this.id = id;
 	}
 
-	public Utilisateur getUtilisateur() {
-		return this.utilisateur;
+	public String getMembres() {
+		return this.membres;
 	}
 
-	public void setUtilisateur(Utilisateur utilisateur) {
-		this.utilisateur = utilisateur;
+	public void setMembres(String membres) {
+		this.membres = membres;
 	}
 
 	public List<Entretien> getEntretiens() {
@@ -68,6 +69,14 @@ public class ComiteEntretien implements Serializable {
 		entretien.setComiteEntretien(null);
 
 		return entretien;
+	}
+
+	public List<Utilisateur> getUtilisateurs() {
+		return this.utilisateurs;
+	}
+
+	public void setUtilisateurs(List<Utilisateur> utilisateurs) {
+		this.utilisateurs = utilisateurs;
 	}
 
 }
