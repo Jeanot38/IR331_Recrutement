@@ -45,24 +45,29 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
         // TODO Auto-generated constructor stub
     }
     
-    public Candidature etudierCandidature(Candidature candidature, String etat) throws BadParameterException{
-    	switch (etat) {
-    	
-    	case "valide" :
-    		candidature.setEtat("valide");
-    		break;
-    		
-    	case "refuse" :
-    		candidature.setEtat("refuse");
-    		break;
-    		
-    	default :
-    		System.out.println("Etat de candidature invalide.");
-     	}
-    	return candidatureDAO.update(candidature);
+    public Candidature etudierCandidature(Candidature candidature, String etat) throws BadParameterException,BadStateException{
+    	if (candidature.getEtat().equalsIgnoreCase("cree")){
+	    	switch (etat) {
+	    	
+	    	case "valide" :
+	    		candidature.setEtat("valide");
+	    		break;
+	    		
+	    	case "refuse" :
+	    		candidature.setEtat("refuse");
+	    		break;
+	    		
+	    	default :
+	    		System.out.println("Etat de candidature invalide.");
+	     	}
+	    	return candidatureDAO.update(candidature);
+    	}
+    	else {
+    		throw new BadStateException("La candidature n'est pas créée.");
+    	}
     }
     
-    public Message informerCandidat(Candidat candidat, String sujet, String contenu ){
+    public Message informerCandidat(Candidat candidat, String sujet, String contenu ){  	
     	Message msg = new Message();
     	Date date = new Date();
     	msg.setCandidat(candidat);
@@ -72,7 +77,11 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	return messageDAO.create(msg);
     }
     
-    public Entretien proposerDateEntretien(Candidature candidature, List <Utilisateur> users, Date dateEntretien){
+    public Entretien proposerDateEntretien(Candidature candidature, List <Utilisateur> users, Date dateEntretien) throws BadStateException, BadParameterException{
+    	if(candidature.getEtat().equalsIgnoreCase("valide")){
+    		if(users.size()==0){
+    			throw new BadParameterException("Aucune personne disponible pour faire partie du comité.");
+    		}
     	Entretien ent = new Entretien();
     	ComiteEntretien com = new ComiteEntretien();
     	com.setUtilisateurs(users);
@@ -84,6 +93,10 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	ent.setDateEntretien(new Timestamp(dateEntretien.getTime()));
     	//ent.setEtat("cree");
     	return entretienDAO.create(ent);
+    	}
+    	else{
+    		throw new BadStateException("La candidature n'est pas validée, impossible de proposer une date.");
+    	}
     }
     
     public Entretien valideEntretien(List <Utilisateur> users, Entretien entretien) throws InvalidUserException,BadStateException {
