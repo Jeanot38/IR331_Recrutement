@@ -29,12 +29,12 @@ public class MessageMngt implements DAO<Message> {
 			Date date= new Date();
     		entity.setDateCreation(new Timestamp(date.getTime()));
     	}
-    	
-    	if(entity.getSujet() == null || entity.getSujet() == "") {
+
+		if(entity.getSujet() == null || entity.getSujet().equals("")) {
     		throw new BadParameterException("Le sujet du message doit être renseigné");
     	}
     	
-    	if(entity.getContenu() == null || entity.getContenu() == "") {
+    	if(entity.getContenu() == null || entity.getContenu().equals("")) {
     		throw new BadParameterException("Le contenu du message doit être renseigné");
     	}
     	
