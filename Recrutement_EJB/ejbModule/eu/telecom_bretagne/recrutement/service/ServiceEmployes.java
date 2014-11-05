@@ -55,7 +55,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     
     public Candidature etudierCandidature(Candidature candidature, String etat) throws BadParameterException,BadStateException{
     	if (!candidature.getEtat().equalsIgnoreCase("cree")){
-    		throw new BadStateException("La candidature n'est pas créée.");
+    		throw new BadParameterException("La candidature n'est pas créée.");
     	}
     	if (etat==null){
     		throw new BadParameterException("L'état de la candidature n'est pas renseigné.");
@@ -87,10 +87,21 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     }
     
     public Entretien proposerDateEntretien(Candidature candidature, List <Utilisateur> users, Date dateEntretien) throws BadStateException, BadParameterException{
-    	if(candidature.getEtat().equalsIgnoreCase("valide")){
-    		if(users.size()==0){
-    			throw new BadParameterException("Aucune personne disponible pour faire partie du comité.");
-    		}
+    	if(!candidature.getEtat().equalsIgnoreCase("valide")){
+    		throw new BadStateException("La candidature n'est pas validée, impossible de proposer une date.");
+    	}
+		if(users.size()==0){
+			throw new BadParameterException("Aucune personne disponible pour faire partie du comité.");
+		}
+		for (Utilisateur user:users){
+			if (user.getCandidat()!=null){
+				throw new BadParameterException("Un candidat ne peut pas proposer de date d'entretien.");
+			}
+		}
+		if((dateEntretien==null)||(dateEntretien!=null && dateEntretien.getTime()<new Date().getTime())){
+			throw new BadParameterException("Merci de saisir une date valide.");
+		}
+		
     	Entretien ent = new Entretien();
     	ComiteEntretien com = new ComiteEntretien();
     	com.setUtilisateurs(users);
@@ -106,10 +117,6 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	return entretienDAO.create(ent);
     	//return ent;
     	}
-    	else{
-    		throw new BadStateException("La candidature n'est pas validée, impossible de proposer une date.");
-    	}
-    }
     
     public Entretien valideEntretien(Utilisateur user, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException {
     	
@@ -142,7 +149,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     
     public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException,BadParameterException{
     	Vote vote = new Vote();
-    	if ((entretien.getCandidature().getEtat()=="valide") && (entretien.getEtat()=="accepte")){
+    	if ((entretien.getCandidature().getEtat().equalsIgnoreCase("valide")) && (entretien.getEtat().equalsIgnoreCase("accepte"))){
     		vote.setEntretien(entretien);
 	    	vote.setNote(note);
 	    	vote.setCommentaires(commentaire);
@@ -154,7 +161,9 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     }
     
     public Candidature validerCandidature(Candidature candidature, String resultat) throws BadStateException, BadParameterException{
-    	if (candidature.getEtat()=="valide"){ //Ajouter une condition sur le vote reçu ? Un test...
+    	if (!candidature.getEtat().equalsIgnoreCase("valide")){ //Ajouter une condition sur le vote reçu ? Un test...
+    		throw new BadStateException("Cette candidature n'est pas valide.");
+    	}
     		switch (resultat){
     		case "accepte" :
     			candidature.setEtat("accepte");
@@ -164,9 +173,5 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     			System.out.println("Etat de candidature invalide.");
     		}
     		return candidatureDAO.update(candidature);
-    	}
-    	else{
-    		throw new BadStateException("Cette candidature n'est pas valide.");
-    	}
     }
 }

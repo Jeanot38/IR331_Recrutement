@@ -298,7 +298,6 @@ public class TestServiceEmployes {
 		
 		Candidature candidature = serviceCommon.findCandidatureById(2);
 		List<Utilisateur> utilisateurs = serviceCommon.getListUtilisateurs();
-
 		for (int i = 0; i<utilisateurs.size();i++) {
 			if(utilisateurs.get(i).getCandidat() != null) {
 				utilisateurs.remove(i);
