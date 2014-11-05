@@ -9,9 +9,13 @@ import javax.ejb.Stateless;
 import eu.telecom_bretagne.recrutement.data.dao.CandidatMngt;
 import eu.telecom_bretagne.recrutement.data.dao.CandidatureMngt;
 import eu.telecom_bretagne.recrutement.data.dao.EntretienMngt;
+import eu.telecom_bretagne.recrutement.data.dao.MessageMngt;
+import eu.telecom_bretagne.recrutement.data.dao.UtilisateurMngt;
 import eu.telecom_bretagne.recrutement.data.model.Candidat;
 import eu.telecom_bretagne.recrutement.data.model.Candidature;
 import eu.telecom_bretagne.recrutement.data.model.Entretien;
+import eu.telecom_bretagne.recrutement.data.model.Message;
+import eu.telecom_bretagne.recrutement.data.model.Utilisateur;
 
 /**
  * Session Bean implementation class ServiceAuthentification
@@ -28,7 +32,13 @@ public class ServiceCommon implements IServiceCommon {
 	
 	@EJB
 	EntretienMngt entretienDAO;
+	
+	@EJB
+	UtilisateurMngt utilisateurDAO;
 
+	@EJB
+	MessageMngt messageDAO;
+	
     /**
      * Default constructor. 
      */
@@ -61,8 +71,20 @@ public class ServiceCommon implements IServiceCommon {
     	return entretienDAO.findAll();
     }
     
-    public void flushEntityManager() {
-    	candidatureDAO.getEntityManager().flush();
+    public List<Utilisateur> getListUtilisateurs() {
+    	return utilisateurDAO.findAll();
+    }
+    
+    public Utilisateur findUtilisateurById(int id) {
+    	return utilisateurDAO.findById(id);
+    }
+    
+    public List<Message> getListMessages() {
+    	return messageDAO.findAll();
+    }
+    
+    public Message findMessageById(int id) {
+    	return messageDAO.findById(id);
     }
     
     

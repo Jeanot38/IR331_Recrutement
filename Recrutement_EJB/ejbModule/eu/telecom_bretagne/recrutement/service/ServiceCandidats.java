@@ -58,6 +58,7 @@ public class ServiceCandidats implements IServiceCandidats {
     	candidature.setCv(cv);
     	candidature.setLettreMotivation(lettreMotivation);
     	candidature.setDateCreation(new Timestamp(date.getTime()));
+    	candidature.setEtat("cree");
     	
     	return candidatureDAO.create(candidature);
     	
@@ -115,7 +116,7 @@ public class ServiceCandidats implements IServiceCandidats {
     		throw new InvalidUserException("Vous n'êtes pas autoriser à annuler une candidature qui ne vous appartient pas");
     	}
     	
-    	if(candidature.getEtat() == "" || candidature.getEtat() == "accepte" || candidature.getEtat() == "refuse") {
+    	if(candidature.getEtat() == "cree" || candidature.getEtat() == "accepte" || candidature.getEtat() == "refuse") {
     		throw new BadStateException("L'état actuel de votre candidature ne vous permet pas de l'annuler");
     	}
     	

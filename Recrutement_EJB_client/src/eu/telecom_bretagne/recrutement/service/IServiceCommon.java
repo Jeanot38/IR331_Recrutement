@@ -7,6 +7,8 @@ import javax.ejb.Remote;
 import eu.telecom_bretagne.recrutement.data.model.Candidat;
 import eu.telecom_bretagne.recrutement.data.model.Candidature;
 import eu.telecom_bretagne.recrutement.data.model.Entretien;
+import eu.telecom_bretagne.recrutement.data.model.Message;
+import eu.telecom_bretagne.recrutement.data.model.Utilisateur;
 
 @Remote
 public interface IServiceCommon {
@@ -25,6 +27,12 @@ public interface IServiceCommon {
 	
 	public List <Entretien> getListEntretiens();
 	
-	public void flushEntityManager();
+    public List<Utilisateur> getListUtilisateurs();
+    
+    public Utilisateur findUtilisateurById(int id);
+    
+    public List<Message> getListMessages();
+    
+    public Message findMessageById(int id);
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="Recrutement_JPA">
-		<jta-data-source>jdbc/recutement</jta-data-source>
+		<jta-data-source>jdbc/recrutement</jta-data-source>
 		<class>eu.telecom_bretagne.recrutement.data.model.Candidat</class>
 		<class>eu.telecom_bretagne.recrutement.data.model.Candidature</class>
 		<class>eu.telecom_bretagne.recrutement.data.model.ComiteEntretien</class>

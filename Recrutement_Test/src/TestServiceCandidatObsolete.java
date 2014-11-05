@@ -1,16 +1,6 @@
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -45,96 +35,53 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
 
 
-public class TestServiceCandidatNew {
+public class TestServiceCandidatObsolete extends DBTestCase {
+ 
+    /** Driver JDBC. */
+    private static final String JDBC_DRIVER = "org.postgresql.Driver";
+ 
+    /** Base de données HSQLDB nommée "database" qui fonctionne en mode mémoire. */
+    private static final String DATABASE = "jdbc:postgresql://localhost:54321/recrutement";
+ 
+    /** Utilisateur qui se connecte à la base de données. */
+    private static final String USER = "postgres";
+ 
+    /** GetDataSet mot de passe pour se connecter à la base de données. */
+    private static final String PASSWORD = "postgres";
 	
-	private Connection connectionBase;
-	private Statement sql;
-	private ResultSet rs;
+	public TestServiceCandidatObsolete() {
+        super();
+        System.setProperty(
+                PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,
+                JDBC_DRIVER);
+        System.setProperty(
+                PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,
+                DATABASE);
+        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME,
+                USER);
+        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD,
+                PASSWORD);
+    }
 	
-	public TestServiceCandidatNew() throws Exception {
-		try {
-		      Class.forName("org.postgresql.Driver" );
-		     } catch (ClassNotFoundException e) {
-		        throw new Exception("Impossible de charger le pilote jdbc:odbc" );
-		     }
-		   
-		     //connection a la base de donnÃ©es
-		     try {
-		        String DBurl = "jdbc:postgresql://localhost:54321/recrutement";
-		        connectionBase = DriverManager.getConnection(DBurl, "postgres", "postgres" );
-		     } catch (Exception e) {
-		        throw new Exception("Connection Ã  la base de donnÃ©es impossible" );
-	     }
-	}
+	protected IDataSet getDataSet() throws Exception {
+        return new FlatXmlDataSet(new FileInputStream(System.getProperty("user.dir")+"/src/datas.xml"));
+    }
 	
-	private String readFile(String filename) {
-        File f = new File(filename);
-        try {
-            byte[] bytes = Files.readAllBytes(f.toPath());
-            return new String(bytes,"UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-	}
+	protected DatabaseOperation getSetUpOperation() throws Exception
+    {
+        return DatabaseOperation.REFRESH;
+    }
 	
-	public void loadDatabase() throws Exception {
-	   
-	     sql = connectionBase.createStatement();
-	     String delete = "drop schema public cascade; create schema public;";
-	     String structure = this.readFile(System.getProperty("user.dir")+"/src/structure.sql").replace("\n", "").replace("\t", " ").substring(1);
-	     String datas = this.readFile(System.getProperty("user.dir")+"/src/datas.sql").replace("\n", "").replace("\t", " ");
-	     
-	   //creation et execution de la requete
-	     try {
-	    	 sql.executeUpdate(delete);
-	    	 sql.executeUpdate(structure);
-	    	 sql.executeUpdate(datas);
-	     } catch (SQLException e) {
-	    	 //if(!e.getMessage().equals("Aucun résultat retourné par la requête.")) {
-	    		 e.printStackTrace();
-		    	 throw new Exception("Anomalie lors de l'execution de la requÃªte" );
-	    	 //}
-	     } catch (Exception e) {
-			System.out.println("Ca marche pas");
-		}
-	}
+	protected DatabaseOperation getTearDownOperation() throws Exception
+    {
+        return DatabaseOperation.TRUNCATE_TABLE;
+    }
 	
-	private void checkResultats() throws Exception {
-		
-		String etatCandidat = "";
-		String etatEntretien = "";
-		
-		sql = connectionBase.createStatement();
-		try {
-			rs = sql.executeQuery("SELECT * FROM candidature WHERE id=2;");
-	    	 rs.next();
-	    	 etatCandidat = rs.getString("etat");
-	    	 
-	    	 rs = sql.executeQuery("SELECT * FROM entretien WHERE id=1;");
-	    	 rs.next();
-	    	 etatEntretien = rs.getString("etat");
-		} catch (SQLException e) {
-		    	 //if(!e.getMessage().equals("Aucun résultat retourné par la requête.")) {
-	   		 e.printStackTrace();
-		    	 throw new Exception("Anomalie lors de l'execution de la requÃªte" );
-	   	 //}
-	    } catch (Exception e) {
-			System.out.println("Ca marche pas");
-		}
-		
-		 IServiceCommon serviceCommon = this.getServiceCommon();
-	     serviceCommon.flushEntityManager();
-	     Candidature candidature = serviceCommon.findCandidatureById(2);
-	     Entretien entretien = serviceCommon.findEntretienById(1);
-	     System.out.println("Etat de la candidature : "+etatCandidat);
-	     System.out.println("Etat supposé : "+candidature.getEtat());
-	     System.out.println("Etat de l'entretien : "+etatEntretien);
-	     System.out.println("Etat supposé : "+entretien.getEtat());
-	}
+	protected void setUpDatabaseConfig(DatabaseConfig config) {
+        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new PostgresqlDataTypeFactory());
 
+    }
+	
 	private IServiceCommon getServiceCommon() {
 		InitialContext ctx;
 		IServiceCommon serviceCommon = null;
@@ -170,15 +117,15 @@ public class TestServiceCandidatNew {
 	// Doit être exécuté avec des datas à l'intérieur
 	@Before
     public void setUp() throws Exception {
-		this.loadDatabase();
+		super.setUp();
 	}
 	
 	@After
 	public void tearDown() throws Exception {
-		//this.checkResultats();
+		super.tearDown();
 	}
 	
-	@Test
+	/*@Test
 	public void testCreerCandidatureCandidatNull(){
 		
 		IServiceCandidats serviceCandidats = this.getServiceCandidat();
@@ -313,7 +260,7 @@ public class TestServiceCandidatNew {
 			fail("InvalidUserException should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("",serviceCommon.findEntretienById(1).getEtat());
+		assertEquals("",entretien.getEtat());
 		
 	}
 	
@@ -340,7 +287,7 @@ public class TestServiceCandidatNew {
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("", serviceCommon.findEntretienById(1).getEtat());
+		assertEquals("", entretien.getEtat());
 		
 	}
 	
@@ -363,7 +310,7 @@ public class TestServiceCandidatNew {
 			fail("InvalidUserException should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("", serviceCommon.findEntretienById(1).getEtat());
+		assertEquals("", entretien.getEtat());
 		
 	}
 	
@@ -386,7 +333,7 @@ public class TestServiceCandidatNew {
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals(null, entretien.getEtat());
+		assertEquals("", entretien.getEtat());
 		
 	}
 	
@@ -407,7 +354,7 @@ public class TestServiceCandidatNew {
 			fail("No exception should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("valide_candidat", serviceCommon.findEntretienById(1).getEtat());
+		assertEquals("valide_candidat", entretien.getEtat());
 		
 	}
 	
@@ -430,7 +377,7 @@ public class TestServiceCandidatNew {
 			fail("InvalidUserException should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("valide", serviceCommon.findCandidatureById(2).getEtat());
+		assertEquals("valide", candidature.getEtat());
 		
 	}
 	
@@ -455,7 +402,7 @@ public class TestServiceCandidatNew {
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("valide", serviceCommon.findCandidatureById(2).getEtat());
+		assertEquals("valide", candidature.getEtat());
 		
 	}
 	
@@ -478,10 +425,10 @@ public class TestServiceCandidatNew {
 			fail("BadStateException should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("valide", serviceCommon.findCandidatureById(1).getEtat());
+		assertEquals("", candidature.getEtat());
 		
 	}
-	
+	*/
 	@Test
 	public void testAnnuleCandidatureValide(){
 		
@@ -492,6 +439,8 @@ public class TestServiceCandidatNew {
 		
 		Candidature candidature = candidat.getCandidatures().get(1);
 		
+		System.out.println("Voila l'avant : "+candidature.getEtat());
+		
 		try {
 			candidature = serviceCandidats.annuleCandidature(candidat, candidature);
 		} catch (Exception e) {
@@ -499,7 +448,9 @@ public class TestServiceCandidatNew {
 			fail("No exception should be catch, "+e.getClass()+" is the real.");
 		}
 		
-		assertEquals("annule", serviceCommon.findCandidatureById(2).getEtat());
+		System.out.println("Voila le résultat : "+candidature.getEtat());
+		
+		assertEquals("annule", candidature.getEtat());
 		
 	}
 

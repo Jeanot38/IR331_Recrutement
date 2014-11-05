@@ -1,6 +1,6 @@
+
 package eu.telecom_bretagne.recrutement.data.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -9,40 +9,40 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import eu.telecom_bretagne.recrutement.data.model.ComiteEntretien;
 import eu.telecom_bretagne.recrutement.data.model.Utilisateur;
-import eu.telecom_bretagne.recrutement.data.model.Vote;
 import eu.telecom_bretagne.recrutement.exception.BadParameterException;
 
 /**
- * Session Bean implementation class VoteDAO
+ * Session Bean implementation class ComiteEntretienDAO
  */
 @Stateless
 @LocalBean
-public class VoteMngt implements DAO<Vote> {
+public class ComiteEntretienMngt implements DAO<ComiteEntretien> {
 	@PersistenceContext
 	EntityManager em;
 
-	public Vote create (Vote entity) throws BadParameterException { 	
+	public ComiteEntretien create (ComiteEntretien entity) throws BadParameterException { 	
 		em.persist(entity);
 		return em.merge(entity);		
 	}
 	
-	public Vote findById (int id) {
-		return em.find(Vote.class, id);
+	public ComiteEntretien findById (int id) {
+		return em.find(ComiteEntretien.class, id);
 	}
 	
-	public List <Vote> findAll() {
+	public List <ComiteEntretien> findAll() {
 		Query query = em
-				.createQuery("select vote from Vote vote order by vote.id");
+				.createQuery("select comiteEntretien from ComiteEntretien comiteEntretien order by comiteEntretien.id");
 		return query.getResultList();
 		
 	}
 	
-	public Vote update (Vote entity) throws BadParameterException {  	
+	public ComiteEntretien update (ComiteEntretien entity) throws BadParameterException {  	
 		return em.merge(entity);
 	}
 	
-	public  void delete (Vote entity) {
+	public  void delete (ComiteEntretien entity) {
 		if(!em.contains(entity)) {
 			em.merge(entity);
 		}

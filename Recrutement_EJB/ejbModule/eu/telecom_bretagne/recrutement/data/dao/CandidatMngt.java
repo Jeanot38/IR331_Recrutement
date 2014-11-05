@@ -1,5 +1,7 @@
 package eu.telecom_bretagne.recrutement.data.dao;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -9,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import eu.telecom_bretagne.recrutement.data.model.Candidat;
+import eu.telecom_bretagne.recrutement.exception.BadParameterException;
 
 /**
  * Session Bean implementation class CandidatDAO
@@ -20,9 +23,18 @@ public class CandidatMngt implements DAO<Candidat> {
 	@PersistenceContext
 	EntityManager em;
 
-	public Candidat create (Candidat entity) {
+	public Candidat create (Candidat entity) throws BadParameterException {
+		
+		if(entity.getAddresse() == null || entity.getAddresse() == "") {
+    		throw new BadParameterException("Une addresse doit être indiquée");
+    	}
+    	
+    	if(entity.getTelephone() == null || entity.getTelephone() == "") {
+    		throw new BadParameterException("Le numéro de téléphone doit être renseigné");
+    	}
+    	
 		em.persist(entity);
-		return entity;		
+		return em.merge(entity);		
 	}
 	
 	public Candidat findById (int id) {
@@ -36,7 +48,16 @@ public class CandidatMngt implements DAO<Candidat> {
 		
 	}
 	
-	public Candidat update (Candidat entity) {
+	public Candidat update (Candidat entity) throws BadParameterException {
+		
+		if(entity.getAddresse() == null || entity.getAddresse() == "") {
+    		throw new BadParameterException("Une addresse doit être indiquée");
+    	}
+    	
+    	if(entity.getTelephone() == null || entity.getTelephone() == "") {
+    		throw new BadParameterException("Le numéro de téléphone doit être renseigné");
+    	}
+    	
 		return em.merge(entity);
 	}
 	

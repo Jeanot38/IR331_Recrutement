@@ -23,7 +23,7 @@ public class UtilisateurMngt implements DAO<Utilisateur> {
 
 	public Utilisateur create (Utilisateur entity) throws BadParameterException { 	
 		em.persist(entity);
-		return entity;		
+		return em.merge(entity);		
 	}
 	
 	public Utilisateur findById (int id) {

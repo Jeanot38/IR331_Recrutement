@@ -1,5 +1,7 @@
 package eu.telecom_bretagne.recrutement.data.dao;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -7,7 +9,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import eu.telecom_bretagne.recrutement.data.model.Message;
+import eu.telecom_bretagne.recrutement.exception.BadParameterException;
 
 /**
  * Session Bean implementation class MessageDAO
@@ -19,9 +23,23 @@ public class MessageMngt implements DAO<Message> {
 	@PersistenceContext
 	EntityManager em;
 
-	public Message create (Message entity) {
+	public Message create (Message entity) throws BadParameterException {
+		
+		if(entity.getDateCreation() == null) {
+			Date date= new Date();
+    		entity.setDateCreation(new Timestamp(date.getTime()));
+    	}
+    	
+    	if(entity.getSujet() == null || entity.getSujet() == "") {
+    		throw new BadParameterException("Le sujet du message doit être renseigné");
+    	}
+    	
+    	if(entity.getContenu() == null || entity.getContenu() == "") {
+    		throw new BadParameterException("Le contenu du message doit être renseigné");
+    	}
+    	
 		em.persist(entity);
-		return entity;
+		return em.merge(entity);
 	}
 	
 	public Message findById (int id) {
@@ -34,7 +52,20 @@ public class MessageMngt implements DAO<Message> {
 		return query.getResultList();
 	}
 	
-	public Message update (Message entity) {
+	public Message update (Message entity) throws BadParameterException {
+		
+		if(entity.getDateCreation() == null) {
+			throw new BadParameterException("La date de création du message ne peut être nulle lors de sa modification");
+    	}
+    	
+    	if(entity.getSujet() == null || entity.getSujet() == "") {
+    		throw new BadParameterException("Le sujet du message doit être renseigné");
+    	}
+    	
+    	if(entity.getContenu() == null || entity.getContenu() == "") {
+    		throw new BadParameterException("Le contenu du message doit être renseigné");
+    	}
+    	
 		return em.merge(entity);
 	}
 	

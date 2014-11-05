@@ -37,7 +37,7 @@ public class Entretien implements Serializable {
 	private ComiteEntretien comiteEntretien;
 
 	//bi-directional one-to-one association to Vote
-	@OneToOne(mappedBy="entretien", fetch=FetchType.EAGER)
+	@OneToOne(mappedBy="entretien")
 	private Vote vote;
 
 	public Entretien() {

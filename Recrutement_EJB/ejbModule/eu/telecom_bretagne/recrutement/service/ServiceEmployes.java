@@ -8,9 +8,11 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import eu.telecom_bretagne.recrutement.data.dao.ComiteEntretienMngt;
 import eu.telecom_bretagne.recrutement.data.dao.EntretienMngt;
 import eu.telecom_bretagne.recrutement.data.dao.MessageMngt;
 import eu.telecom_bretagne.recrutement.data.dao.CandidatureMngt;
+import eu.telecom_bretagne.recrutement.data.dao.UtilisateurMngt;
 import eu.telecom_bretagne.recrutement.data.model.Candidature;
 import eu.telecom_bretagne.recrutement.data.model.Candidat;
 import eu.telecom_bretagne.recrutement.data.model.ComiteEntretien;
@@ -37,6 +39,12 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
 	
 	@EJB
 	EntretienMngt entretienDAO;
+	
+	@EJB
+	UtilisateurMngt utilisateurDAO;
+	
+	@EJB
+	ComiteEntretienMngt comiteEntretienDAO;
 
     /**
      * Default constructor. 
@@ -67,7 +75,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	}
     }
     
-    public Message informerCandidat(Candidat candidat, String sujet, String contenu ){  	
+    public Message informerCandidat(Candidat candidat, String sujet, String contenu ) throws BadParameterException {  	
     	Message msg = new Message();
     	Date date = new Date();
     	msg.setCandidat(candidat);
@@ -85,21 +93,24 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	Entretien ent = new Entretien();
     	ComiteEntretien com = new ComiteEntretien();
     	com.setUtilisateurs(users);
-    	/*for (Utilisateur utilisateur : users) {
-			utilisateur.
-		}*/
+    	for (Utilisateur utilisateur : users) {
+			utilisateur.getComiteEntretiens().add(com);
+			utilisateurDAO.update(utilisateur);
+    	}
+    	com = comiteEntretienDAO.create(com);
     	ent.setCandidature(candidature);
     	ent.setComiteEntretien(com);
     	ent.setDateEntretien(new Timestamp(dateEntretien.getTime()));
-    	//ent.setEtat("cree");
+    	ent.setEtat("cree");
     	return entretienDAO.create(ent);
+    	//return ent;
     	}
     	else{
     		throw new BadStateException("La candidature n'est pas validée, impossible de proposer une date.");
     	}
     }
     
-    public Entretien valideEntretien(List <Utilisateur> users, Entretien entretien) throws InvalidUserException,BadStateException {
+    public Entretien valideEntretien(List <Utilisateur> users, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException {
     	
     	/*
     	if(users == null) {

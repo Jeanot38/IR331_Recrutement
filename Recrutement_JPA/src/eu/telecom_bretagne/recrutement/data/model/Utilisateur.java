@@ -42,7 +42,7 @@ public class Utilisateur implements Serializable {
 	private ServiceRh serviceRh;
 
 	//bi-directional many-to-many association to ComiteEntretien
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(
 		name="utilisateur_comite_entretien"
 		, joinColumns={
