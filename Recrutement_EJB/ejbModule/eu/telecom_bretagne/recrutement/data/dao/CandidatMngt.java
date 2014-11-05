@@ -25,11 +25,11 @@ public class CandidatMngt implements DAO<Candidat> {
 
 	public Candidat create (Candidat entity) throws BadParameterException {
 		
-		if(entity.getAddresse() == null || entity.getAddresse() == "") {
+		if(entity.getAddresse() == null || entity.getAddresse().equals("")) {
     		throw new BadParameterException("Une addresse doit être indiquée");
     	}
     	
-    	if(entity.getTelephone() == null || entity.getTelephone() == "") {
+    	if(entity.getTelephone() == null || entity.getTelephone().equals("")) {
     		throw new BadParameterException("Le numéro de téléphone doit être renseigné");
     	}
     	

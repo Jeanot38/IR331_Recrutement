@@ -25,11 +25,11 @@ public class CandidatureMngt implements DAO<Candidature> {
 
 	public Candidature create (Candidature entity) throws BadParameterException {
 		
-		if(entity.getCv() == null || entity.getCv() == "") {
+		if(entity.getCv() == null || entity.getCv().equals("")) {
     		throw new BadParameterException("Le contenu du CV ne peut être nul");
     	}
     	
-    	if(entity.getLettreMotivation() == null || entity.getLettreMotivation() == "") {
+    	if(entity.getLettreMotivation() == null || entity.getLettreMotivation().equals("")) {
     		throw new BadParameterException("Le contenu de la lettre de motivation ne peut être nul");
     	}
     	

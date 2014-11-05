@@ -26,10 +26,13 @@ import org.junit.Test;
 
 import eu.telecom_bretagne.recrutement.data.model.Candidat;
 import eu.telecom_bretagne.recrutement.data.model.Candidature;
+import eu.telecom_bretagne.recrutement.data.model.Entretien;
 import eu.telecom_bretagne.recrutement.data.model.Utilisateur;
 import eu.telecom_bretagne.recrutement.exception.BadParameterException;
 import eu.telecom_bretagne.recrutement.exception.BadStateException;
+import eu.telecom_bretagne.recrutement.service.IServiceComiteEntretien;
 import eu.telecom_bretagne.recrutement.service.IServiceCommon;
+import eu.telecom_bretagne.recrutement.service.IServiceDirecteur;
 import eu.telecom_bretagne.recrutement.service.IServiceRH;
 
 
@@ -120,6 +123,38 @@ public class TestServiceEmployes {
 			System.exit(-1);
 		}
 		return serviceRH;
+	}
+	
+	private IServiceDirecteur getServiceDirecteur() {
+		InitialContext ctx;
+		IServiceDirecteur serviceDirecteur = null;
+		try {
+			ctx = new InitialContext();
+			serviceDirecteur = (IServiceDirecteur) ctx.lookup(IServiceDirecteur.JNDI_NAME);
+		}
+		catch (NamingException e)
+		{
+			// Unable to retrieve the context or the service
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		return serviceDirecteur;
+	}
+	
+	private IServiceComiteEntretien getServiceComiteEntretien() {
+		InitialContext ctx;
+		IServiceComiteEntretien serviceComiteEntretien = null;
+		try {
+			ctx = new InitialContext();
+			serviceComiteEntretien = (IServiceComiteEntretien) ctx.lookup(IServiceComiteEntretien.JNDI_NAME);
+		}
+		catch (NamingException e)
+		{
+			// Unable to retrieve the context or the service
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		return serviceComiteEntretien;
 	}
 	
 	@Before
@@ -663,5 +698,175 @@ public class TestServiceEmployes {
 		}
 		assertEquals(nombreMessage+1, serviceCommon.getListMessages().size());
 	}
+	
+	/*@Test
+	public void testValideEntretien() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		int nombreMessage = serviceCommon.getListMessages().size();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(2);
+		
+		try {
+			serviceComiteEntretien.valideEntretien(users, entretien)
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals(nombreMessage, serviceCommon.getListMessages().size());
+	}*/
+	
+	@Test
+	public void testDonnerAvisEntretienNull() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(2);
+		int note = 14;
+		String commentaire = "Commentaires super utiles";
+		
+		try {
+			serviceComiteEntretien.donnerAvis(null, note, commentaire);
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+	}
+	
+	@Test
+	public void testDonnerAvisBadNote() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(2);
+		int note = 14;
+		String commentaire = "Commentaires super utiles";
+		
+		try {
+			serviceComiteEntretien.donnerAvis(entretien, -1, commentaire);
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+	}
+	
+	@Test
+	public void testDonnerAvisBadNote2() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(2);
+		int note = 14;
+		String commentaire = "Commentaires super utiles";
+		
+		try {
+			serviceComiteEntretien.donnerAvis(entretien, 23, commentaire);
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+	}
+	
+	@Test
+	public void testDonnerAvisCommentairesNull() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(2);
+		int note = 14;
+		String commentaire = "Commentaires super utiles";
+		
+		try {
+			serviceComiteEntretien.donnerAvis(entretien, note, null);
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+	}
+	
+	@Test
+	public void testDonnerAvisBadState() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(1);
+		int note = 14;
+		String commentaire = "Commentaires super utiles";
+		
+		try {
+			serviceComiteEntretien.donnerAvis(entretien, note, null);
+		} catch (BadStateException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadStateException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+	}
+	
+	@Test
+	public void testDonnerAvisValide() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(2);
+		int note = 14;
+		String commentaire = "Commentaires super utiles";
+		
+		System.out.println("Etat entretien"+entretien.getEtat());
+		
+		try {
+			serviceComiteEntretien.donnerAvis(entretien, note, commentaire);
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("No Exception should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertTrue(serviceCommon.findEntretienById(2).getVote() != null);
+	}
+	
+	
 	
 }

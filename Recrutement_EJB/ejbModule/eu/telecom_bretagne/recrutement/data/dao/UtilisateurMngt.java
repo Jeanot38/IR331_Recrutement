@@ -25,19 +25,19 @@ public class UtilisateurMngt implements DAO<Utilisateur> {
 
 	public Utilisateur create (Utilisateur entity) throws BadParameterException { 	
 		
-		if(entity.getNom() == null || entity.getNom() == "") {
+		if(entity.getNom() == null || entity.getNom().equals("")) {
     		throw new BadParameterException("Le nom de l'utilisateur doit être renseigné");
     	}
     	
-    	if(entity.getPrenom() == null || entity.getPrenom() == "") {
+    	if(entity.getPrenom() == null || entity.getPrenom().equals("")) {
     		throw new BadParameterException("Le prenom de l'utilisateur doit être renseigné");
     	}
     	
-    	if(entity.getLogin() == null || entity.getLogin() == "") {
+    	if(entity.getLogin() == null || entity.getLogin().equals("")) {
     		throw new BadParameterException("Le login de l'utilisateur doit être renseigné");
     	}
     	
-    	if(entity.getPassword() == null || entity.getPassword() == "") {
+    	if(entity.getPassword() == null || entity.getPassword().equals("")) {
     		throw new BadParameterException("Le password doit être renseigné");
     	}
     	

@@ -29,7 +29,7 @@ public class EntretienMngt implements DAO<Entretien> {
     		throw new BadParameterException("La date de l'entretien doit être indiquée");
     	}
     	
-    	if(entity.getEtat() == null || entity.getEtat() == "") {
+    	if(entity.getEtat() == null || entity.getEtat().equals("")) {
     		throw new BadParameterException("L'entretien ne peut avoir un état nul");
     	}
     	
