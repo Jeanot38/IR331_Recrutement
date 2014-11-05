@@ -22,7 +22,16 @@ public class VoteMngt implements DAO<Vote> {
 	@PersistenceContext
 	EntityManager em;
 
-	public Vote create (Vote entity) throws BadParameterException { 	
+	public Vote create (Vote entity) throws BadParameterException {
+		
+		if(entity.getCommentaires() == null || entity.getCommentaires() == "") {
+    		throw new BadParameterException("Les commentaires de l'avis doivent être renseignés");
+    	}
+    	
+    	if(entity.getNote() < 0 && entity.getNote() > 20) {
+    		throw new BadParameterException("La note de l'avis doit être renseigné");
+    	}
+    	
 		em.persist(entity);
 		return em.merge(entity);		
 	}
@@ -38,7 +47,16 @@ public class VoteMngt implements DAO<Vote> {
 		
 	}
 	
-	public Vote update (Vote entity) throws BadParameterException {  	
+	public Vote update (Vote entity) throws BadParameterException { 
+		
+		if(entity.getCommentaires() == null || entity.getCommentaires() == "") {
+    		throw new BadParameterException("Les commentaires de l'avis doivent être renseignés");
+    	}
+    	
+    	if(entity.getNote() == null) {
+    		throw new BadParameterException("La note de l'avis doit être renseigné");
+    	}
+    	
 		return em.merge(entity);
 	}
 	

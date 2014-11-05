@@ -1,6 +1,8 @@
 
 package eu.telecom_bretagne.recrutement.data.dao;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -22,6 +24,23 @@ public class UtilisateurMngt implements DAO<Utilisateur> {
 	EntityManager em;
 
 	public Utilisateur create (Utilisateur entity) throws BadParameterException { 	
+		
+		if(entity.getNom() == null || entity.getNom() == "") {
+    		throw new BadParameterException("Le nom de l'utilisateur doit être renseigné");
+    	}
+    	
+    	if(entity.getPrenom() == null || entity.getPrenom() == "") {
+    		throw new BadParameterException("Le prenom de l'utilisateur doit être renseigné");
+    	}
+    	
+    	if(entity.getLogin() == null || entity.getLogin() == "") {
+    		throw new BadParameterException("Le login de l'utilisateur doit être renseigné");
+    	}
+    	
+    	if(entity.getPassword() == null || entity.getPassword() == "") {
+    		throw new BadParameterException("Le password doit être renseigné");
+    	}
+    	
 		em.persist(entity);
 		return em.merge(entity);		
 	}
@@ -38,6 +57,23 @@ public class UtilisateurMngt implements DAO<Utilisateur> {
 	}
 	
 	public Utilisateur update (Utilisateur entity) throws BadParameterException {  	
+		
+		if(entity.getNom() == null || entity.getNom() == "") {
+    		throw new BadParameterException("Le nom de l'utilisateur doit être renseigné");
+    	}
+    	
+    	if(entity.getPrenom() == null || entity.getPrenom() == "") {
+    		throw new BadParameterException("Le prenom de l'utilisateur doit être renseigné");
+    	}
+    	
+    	if(entity.getLogin() == null || entity.getLogin() == "") {
+    		throw new BadParameterException("Le login de l'utilisateur doit être renseigné");
+    	}
+    	
+    	if(entity.getPassword() == null || entity.getPassword() == "") {
+    		throw new BadParameterException("Le password doit être renseigné");
+    	}
+    	
 		return em.merge(entity);
 	}
 	

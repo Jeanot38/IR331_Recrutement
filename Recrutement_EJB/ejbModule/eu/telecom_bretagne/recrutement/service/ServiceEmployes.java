@@ -140,7 +140,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	return entretienDAO.update(entretien);
     }
     
-    public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException{
+    public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException,BadParameterException{
     	Vote vote = new Vote();
     	if ((entretien.getCandidature().getEtat()=="valide") && (entretien.getEtat()=="accepte")){
     		vote.setEntretien(entretien);

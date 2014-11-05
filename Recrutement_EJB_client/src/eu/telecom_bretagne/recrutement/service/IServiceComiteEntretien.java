@@ -18,6 +18,6 @@ public interface IServiceComiteEntretien {
 	
 	public Entretien valideEntretien(Utilisateur user, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException;
 	
-	public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException;
+	public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException,BadParameterException;
 
 }
