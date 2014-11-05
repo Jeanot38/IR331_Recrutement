@@ -54,7 +54,12 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     }
     
     public Candidature etudierCandidature(Candidature candidature, String etat) throws BadParameterException,BadStateException{
-    	if (candidature.getEtat().equalsIgnoreCase("cree")){
+    	if (!candidature.getEtat().equalsIgnoreCase("cree")){
+    		throw new BadStateException("La candidature n'est pas créée.");
+    	}
+    	if (etat==null){
+    		throw new BadParameterException("L'état de la candidature n'est pas renseigné.");
+    	}
 	    	switch (etat) {
 	    	
 	    	case "valide" :
@@ -68,11 +73,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
 	    	default :
 	    		System.out.println("Etat de candidature invalide.");
 	     	}
-	    	return candidatureDAO.update(candidature);
-    	}
-    	else {
-    		throw new BadStateException("La candidature n'est pas créée.");
-    	}
+	    	return candidatureDAO.update(candidature);   		
     }
     
     public Message informerCandidat(Candidat candidat, String sujet, String contenu ) throws BadParameterException {  	
@@ -110,13 +111,13 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	}
     }
     
-    public Entretien valideEntretien(List <Utilisateur> users, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException {
+    public Entretien valideEntretien(Utilisateur user, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException {
     	
-    	/*
-    	if(users == null) {
-    		throw new InvalidUserException("Vous ne pouvez valider cet entretien car vous n'êtes pas connecté");
+    	
+    	if(!entretien.getComiteEntretien().getUtilisateurs().contains(user)) {
+    		throw new InvalidUserException("Vous ne pouvez pas valider car vous ne faites pas parti du comité de cet entretien.");
     	}
-    	
+    	/*
     	if(!entretien.getCandidature().getCandidat().equals(candidat)) {
     		throw new InvalidUserException("Vous ne pouvez valider cet entretien car celui-ci ne correspond pas à votre candidature");
     	}

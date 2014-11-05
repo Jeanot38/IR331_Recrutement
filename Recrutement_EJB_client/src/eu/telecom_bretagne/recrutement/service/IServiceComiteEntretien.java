@@ -16,7 +16,7 @@ public interface IServiceComiteEntretien {
 	
 	public static final String JNDI_NAME = "java:global/Recrutement_EAR/Recrutement_EJB/ServiceEmployes!eu.telecom_bretagne.recrutement.service.IServiceComiteEntretien";
 	
-	public Entretien valideEntretien(List <Utilisateur> users, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException;
+	public Entretien valideEntretien(Utilisateur user, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException;
 	
 	public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException;
 
