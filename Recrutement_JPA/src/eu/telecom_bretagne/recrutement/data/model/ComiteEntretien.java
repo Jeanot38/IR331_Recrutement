@@ -1,7 +1,9 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -77,6 +79,40 @@ public class ComiteEntretien implements Serializable {
 
 	public void setUtilisateurs(List<Utilisateur> utilisateurs) {
 		this.utilisateurs = utilisateurs;
+	}
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof ComiteEntretien)) {
+			return false;
+		}
+		
+		ComiteEntretien comiteEntretien = (ComiteEntretien) o;
+		
+		if(this.getId() != null && !this.getId().equals(comiteEntretien.getId())) {
+			return false;
+		} else if(this.getId() == null && comiteEntretien.getId() != null) {
+			return false;
+		}
+		
+		/*if(this.getEntretiens() != null && !this.getEntretiens().equals(comiteEntretien.getEntretiens())) {
+			return false;
+		} else if(this.getEntretiens() == null && comiteEntretien.getEntretiens() != null) {
+			return false;
+		}*/
+		
+		if(this.getMembres() != null && !this.getMembres().equals(comiteEntretien.getMembres())) {
+			return false;
+		} else if(this.getMembres() == null && comiteEntretien.getMembres() != null) {
+			return false;
+		}
+		
+		/*if(this.getUtilisateurs() != null && !this.getUtilisateurs().equals(comiteEntretien.getUtilisateurs())) {
+			return false;
+		} else if(this.getUtilisateurs() == null && comiteEntretien.getUtilisateurs() != null) {
+			return false;
+		}*/
+		
+		return true;
 	}
 
 }

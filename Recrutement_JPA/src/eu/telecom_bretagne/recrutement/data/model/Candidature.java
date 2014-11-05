@@ -1,7 +1,9 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -110,6 +112,58 @@ public class Candidature implements Serializable {
 		entretien.setCandidature(null);
 
 		return entretien;
+	}
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof Candidature)) {
+			return false;
+		}
+		
+		Candidature candidature = (Candidature) o;
+		
+		if(this.getId() != null && !this.getId().equals(candidature.getId())) {
+			return false;
+		} else if(this.getId() == null && candidature.getId() != null) {
+			return false;
+		}
+		
+		/*if(this.getCandidat() != null && !this.getCandidat().equals(candidature.getCandidat())) {
+			return false;
+		} else if(this.getCandidat() == null && candidature.getCandidat() != null) {
+			return false;
+		}*/
+		
+		if(this.getCv() != null && !this.getCv().equals(candidature.getCv())) {
+			return false;
+		} else if(this.getCv() == null && candidature.getCv() != null) {
+			return false;
+		}
+		
+		if(this.getDateCreation() != null && !this.getDateCreation().equals(candidature.getDateCreation())) {
+			return false;
+		} else if(this.getDateCreation() == null && candidature.getDateCreation	() != null) {
+			return false;
+		}
+		
+		/*if(this.getEntretiens() != null && !this.getEntretiens().equals(candidature.getEntretiens())) {
+			return false;
+		} else if(this.getEntretiens() == null && candidature.getEntretiens() != null) {
+			return false;
+		}*/
+		
+		if(this.getEtat() != null && !this.getEtat().equals(candidature.getEtat())) {
+			return false;
+		} else if(this.getEtat() == null && candidature.getEtat() != null) {
+			return false;
+		}
+		
+		if(this.getLettreMotivation() != null && !this.getLettreMotivation().equals(candidature.getLettreMotivation())) {
+			return false;
+		} else if(this.getLettreMotivation() == null && candidature.getLettreMotivation() != null) {
+			return false;
+		}
+		
+		return true;		
 	}
 
 }

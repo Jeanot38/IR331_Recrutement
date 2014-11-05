@@ -8,8 +8,10 @@ import javax.ejb.Stateless;
 
 import eu.telecom_bretagne.recrutement.data.dao.CandidatMngt;
 import eu.telecom_bretagne.recrutement.data.dao.CandidatureMngt;
+import eu.telecom_bretagne.recrutement.data.dao.EntretienMngt;
 import eu.telecom_bretagne.recrutement.data.model.Candidat;
 import eu.telecom_bretagne.recrutement.data.model.Candidature;
+import eu.telecom_bretagne.recrutement.data.model.Entretien;
 
 /**
  * Session Bean implementation class ServiceAuthentification
@@ -23,6 +25,9 @@ public class ServiceCommon implements IServiceCommon {
 	
 	@EJB
 	CandidatureMngt candidatureDAO;
+	
+	@EJB
+	EntretienMngt entretienDAO;
 
     /**
      * Default constructor. 
@@ -45,6 +50,19 @@ public class ServiceCommon implements IServiceCommon {
     
     public Candidature findCandidatureById(int id) {
 		return candidatureDAO.findById(id);
+		
+    }
+    
+    public Entretien findEntretienById(int id) {
+		return entretienDAO.findById(id);
+	}
+    
+    public List <Entretien> getListEntretiens() {
+    	return entretienDAO.findAll();
+    }
+    
+    public void flushEntityManager() {
+    	candidatureDAO.getEntityManager().flush();
     }
     
     

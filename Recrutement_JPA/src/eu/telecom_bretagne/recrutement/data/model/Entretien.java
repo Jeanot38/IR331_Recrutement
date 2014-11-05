@@ -1,7 +1,9 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -35,7 +37,7 @@ public class Entretien implements Serializable {
 	private ComiteEntretien comiteEntretien;
 
 	//bi-directional one-to-one association to Vote
-	@OneToOne(mappedBy="entretien")
+	@OneToOne(mappedBy="entretien", fetch=FetchType.EAGER)
 	private Vote vote;
 
 	public Entretien() {
@@ -87,6 +89,52 @@ public class Entretien implements Serializable {
 
 	public void setVote(Vote vote) {
 		this.vote = vote;
+	}
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof Entretien)) {
+			return false;
+		}
+		
+		Entretien entretien = (Entretien) o;
+		
+		if(this.getId() != null && !this.getId().equals(entretien.getId())) {
+			return false;
+		} else if(this.getId() == null && entretien.getId() != null) {
+			return false;
+		}
+		
+		/*if(this.getCandidature() != null && !this.getCandidature().equals(entretien.getCandidature())) {
+			return false;
+		} else if(this.getCandidature() == null && entretien.getCandidature() != null) {
+			return false;
+		}*/
+		
+		/*if(this.getComiteEntretien() != null && !this.getComiteEntretien().equals(entretien.getComiteEntretien())) {
+			return false;
+		} else if(this.getComiteEntretien() == null && entretien.getComiteEntretien() != null) {
+			return false;
+		}*/
+		
+		if(this.getDateEntretien() != null && !this.getDateEntretien().equals(entretien.getDateEntretien())) {
+			return false;
+		} else if(this.getDateEntretien() == null && entretien.getDateEntretien() != null) {
+			return false;
+		}
+		
+		if(this.getEtat() != null && !this.getEtat().equals(entretien.getEtat())) {
+			return false;
+		} else if(this.getEtat() == null && entretien.getEtat() != null) {
+			return false;
+		}
+		
+		/*if(this.getVote() != null && !this.getVote().equals(entretien.getVote())) {
+			return false;
+		} else if(this.getVote() == null && entretien.getVote() != null) {
+			return false;
+		}*/
+		
+		return true;
 	}
 
 }

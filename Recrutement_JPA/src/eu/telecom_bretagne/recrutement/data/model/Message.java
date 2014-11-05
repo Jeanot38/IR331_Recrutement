@@ -1,7 +1,9 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -73,5 +75,45 @@ public class Message implements Serializable {
 	public void setCandidat(Candidat candidat) {
 		this.candidat = candidat;
 	}
-
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof Message)) {
+			return false;
+		}
+		
+		Message message = (Message) o;
+		
+		if(this.getId() != null && !this.getId().equals(message.getId())) {
+			return false;
+		} else if(this.getId() == null && message.getId() != null) {
+			return false;
+		}
+		
+		/*if(this.getCandidat() != null && !this.getCandidat().equals(message.getCandidat())) {
+			return false;
+		} else if(this.getCandidat() == null && message.getCandidat() != null) {
+			return false;
+		}*/
+		
+		if(this.getContenu() != null && !this.getContenu().equals(message.getContenu())) {
+			return false;
+		} else if(this.getContenu() == null && message.getContenu() != null) {
+			return false;
+		}
+		
+		if(this.getDateCreation() != null && !this.getDateCreation().equals(message.getDateCreation())) {
+			return false;
+		} else if(this.getDateCreation() == null && message.getDateCreation() != null) {
+			return false;
+		}
+		
+		if(this.getSujet() != null && !this.getSujet().equals(message.getSujet())) {
+			return false;
+		} else if(this.getSujet() == null && message.getSujet() != null) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 }

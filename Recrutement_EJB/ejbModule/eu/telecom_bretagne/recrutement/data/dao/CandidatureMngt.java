@@ -22,6 +22,10 @@ import eu.telecom_bretagne.recrutement.exception.BadParameterException;
 public class CandidatureMngt implements DAO<Candidature> {
 	@PersistenceContext
 	EntityManager em;
+	
+	public EntityManager getEntityManager() {
+		return this.em;
+	}
 
 	public Candidature create (Candidature entity) throws BadParameterException {
 		

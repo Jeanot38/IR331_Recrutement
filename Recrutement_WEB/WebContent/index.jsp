@@ -53,7 +53,8 @@ Candidature n°<%= candidature.getId()%><br />
 Nom : <%= utilisateur.getNom()%><br />
 Prenom : <%= utilisateur.getPrenom()%><br />
 CV : <br /> <%= candidature.getCv() %><br />
-Lettre de motivation : <br /> <%= candidature.getLettreMotivation() %><br /><br/>
+Lettre de motivation : <br /> <%= candidature.getLettreMotivation() %><br />
+Etat : <br /> <%= candidature.getEtat() %><br /><br/>
 <%
 }
 %>

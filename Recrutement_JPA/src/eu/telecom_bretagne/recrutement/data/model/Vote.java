@@ -1,6 +1,7 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -61,5 +62,39 @@ public class Vote implements Serializable {
 	public void setEntretien(Entretien entretien) {
 		this.entretien = entretien;
 	}
-
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof Vote)) {
+			return false;
+		}
+		
+		Vote vote = (Vote) o;
+		
+		if(this.getId() != null && !this.getId().equals(vote.getId())) {
+			return false;
+		} else if(this.getId() == null && vote.getId() != null) {
+			return false;
+		}
+		
+		if(this.getCommentaires() != null && !this.getCommentaires().equals(vote.getCommentaires())) {
+			return false;
+		} else if(this.getCommentaires() == null && vote.getCommentaires() != null) {
+			return false;
+		}
+		
+		/*if(this.getEntretien() != null && !this.getEntretien().equals(vote.getEntretien())) {
+			return false;
+		} else if(this.getEntretien() == null && vote.getEntretien() != null) {
+			return false;
+		}*/
+		
+		if(this.getNote() != null && !this.getNote().equals(vote.getNote())) {
+			return false;
+		} else if(this.getNote() == null && vote.getNote() != null) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 }

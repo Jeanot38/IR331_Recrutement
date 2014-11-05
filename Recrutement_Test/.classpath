@@ -6,5 +6,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Recrutement_EJB_client"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Recrutement_JPA"/>
 	<classpathentry kind="lib" path="/opt/glassfish4/glassfish/lib/gf-client.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Recrutement_EJB"/>
+	<classpathentry kind="lib" path="/opt/librairies/dbunit-2.4.5.jar"/>
+	<classpathentry kind="lib" path="/opt/librairies/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="/opt/librairies/slf4j-simple-1.5.8.jar"/>
+	<classpathentry kind="lib" path="/opt/librairies/postgresql-9.3-1101.jdbc41.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

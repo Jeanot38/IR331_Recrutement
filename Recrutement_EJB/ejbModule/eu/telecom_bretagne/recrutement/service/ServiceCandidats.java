@@ -63,7 +63,13 @@ public class ServiceCandidats implements IServiceCandidats {
     	
     }
     
-    public Entretien valideEntretien(Candidature candidat, Entretien entretien) throws InvalidUserException,BadStateException {
+    public Entretien valideEntretien(Candidat candidat, Entretien entretien) throws InvalidUserException,BadParameterException,BadStateException {
+    	
+    	List<Entretien> listEntretiens = entretienDAO.findAll();
+    	
+    	if(entretien == null || ! listEntretiens.contains(entretien)) {
+    		throw new BadParameterException("L'entretien sélectionné n'est pas valide");
+    	}
     	
     	if(candidat == null) {
     		throw new InvalidUserException("Vous ne pouvez valider cet entretien car vous n'êtes pas connecté");
@@ -71,6 +77,10 @@ public class ServiceCandidats implements IServiceCandidats {
     	
     	if(!entretien.getCandidature().getCandidat().equals(candidat)) {
     		throw new InvalidUserException("Vous ne pouvez valider cet entretien car celui-ci ne correspond pas à votre candidature");
+    	}
+
+    	if(!entretien.getCandidature().getEtat().equals("valide")) {
+    		throw new BadStateException("Votre candidature doit avoir été validé pour valider l'entretien");
     	}
     	
     	if(entretien.getEtat().equals("valide_candidat") || entretien.getEtat().equals("valide")) {
@@ -91,11 +101,21 @@ public class ServiceCandidats implements IServiceCandidats {
     
     public Candidature annuleCandidature(Candidat candidat, Candidature candidature) throws InvalidUserException, BadStateException, BadParameterException {
     	
+    	List<Candidature> listCandidatures = candidatureDAO.findAll();
+    	
+    	if(candidature == null || ! listCandidatures.contains(candidature)) {
+    		throw new BadParameterException("La candidature sélectionné n'est pas valide");
+    	}
+    	
+    	if(candidat == null) {
+    		throw new InvalidUserException("Vous ne pouvez valider cet entretien car vous n'êtes pas connecté");
+    	}
+    	
     	if(!candidature.getCandidat().equals(candidat)) {
     		throw new InvalidUserException("Vous n'êtes pas autoriser à annuler une candidature qui ne vous appartient pas");
     	}
     	
-    	if(candidature.getEtat() == "accepte" || candidature.getEtat() == "refuse") {
+    	if(candidature.getEtat() == "" || candidature.getEtat() == "accepte" || candidature.getEtat() == "refuse") {
     		throw new BadStateException("L'état actuel de votre candidature ne vous permet pas de l'annuler");
     	}
     	

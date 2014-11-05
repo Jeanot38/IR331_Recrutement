@@ -1,5 +1,3 @@
-﻿-- Utilisateurs
-
 INSERT INTO utilisateur(nom,prenom,login,password)
 VALUES ('Durand', 'Jean', 'jeand', 'jeand');
 
@@ -11,8 +9,6 @@ VALUES ('Toto', 'Jeanot', 'jeanott', 'jeanott');
 
 INSERT INTO utilisateur(nom,prenom,login,password)
 VALUES ('Candidat', 'Toto', 'totoc', 'totoc');
-
--- Roles
 
 INSERT INTO candidat(id,addresse,telephone)
 VALUES ('1', 'De champêtre à Grenoble', '0640521364');
@@ -26,10 +22,8 @@ VALUES ('3', 'Lisbonne', 'Paye');
 INSERT INTO candidat(id,addresse,telephone)
 VALUES ('4', 'Ailleurs', '0231658945');
 
--- Objets
-
-INSERT INTO candidature(date_creation, cv, lettre_motivation, id_candidat)
-VALUES ('2014-08-25', 'Bonjour,Voici mon CV', 'Et Ici ma lettre de motiv', 1);
+INSERT INTO candidature(date_creation, cv, lettre_motivation, etat, id_candidat)
+VALUES ('2014-08-25', 'Bonjour,Voici mon CV', 'Et Ici ma lettre de motiv', '', 1);
 
 INSERT INTO candidature(date_creation, cv, lettre_motivation, etat, id_candidat)
 VALUES ('2014-08-25', 'Bonjour,Voici mon CV 2', 'Et Ici ma lettre de motiv 2', 'valide', 1);

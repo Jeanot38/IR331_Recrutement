@@ -1,6 +1,7 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -52,5 +53,33 @@ public class ServiceRh implements Serializable {
 	public void setUtilisateur(Utilisateur utilisateur) {
 		this.utilisateur = utilisateur;
 	}
-
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof ServiceRh)) {
+			return false;
+		}
+		
+		ServiceRh serviceRH = (ServiceRh) o;
+		
+		if(this.getId() != null && !this.getId().equals(serviceRH.getId())) {
+			return false;
+		} else if(this.getId() == null && serviceRH.getId() != null) {
+			return false;
+		}
+		
+		if(this.getLocalisation() != null && !this.getLocalisation().equals(serviceRH.getLocalisation())) {
+			return false;
+		} else if(this.getLocalisation() == null && serviceRH.getLocalisation() != null) {
+			return false;
+		}
+		
+		/*if(this.getUtilisateur() != null && !this.getUtilisateur().equals(serviceRH.getUtilisateur())) {
+			return false;
+		} else if(this.getUtilisateur() == null && serviceRH.getUtilisateur() != null) {
+			return false;
+		}*/
+		
+		return true;
+	}
+	
 }

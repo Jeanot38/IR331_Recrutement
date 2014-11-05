@@ -16,7 +16,7 @@ public interface IServiceCandidats {
 	
 	public Candidature creerCandidature(Candidat candidat, String cv, String lettreMotivation) throws InvalidUserException,BadParameterException;
 	
-	public Entretien valideEntretien(Candidature candidat, Entretien entretien) throws InvalidUserException,BadStateException;
+	public Entretien valideEntretien(Candidat candidat, Entretien entretien) throws InvalidUserException,BadParameterException,BadStateException;
 	
 	public Candidature annuleCandidature(Candidat candidat, Candidature candidature) throws InvalidUserException, BadStateException, BadParameterException;
 

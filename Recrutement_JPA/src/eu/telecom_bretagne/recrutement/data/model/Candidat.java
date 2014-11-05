@@ -122,17 +122,41 @@ public class Candidat implements Serializable {
 		
 		Candidat candidat = (Candidat) o;
 		
-		if(this.getAddresse() == null || !this.getAddresse().equals(candidat.getAddresse())) {
+		if(this.getId() != null && !this.getId().equals(candidat.getId())) {
+			return false;
+		} else if(this.getId() == null && candidat.getId() != null) {
 			return false;
 		}
 		
-		if(this.getTelephone() == null || !this.getTelephone().equals(candidat.getTelephone())) {
+		if(this.getAddresse() != null && !this.getAddresse().equals(candidat.getAddresse())) {
+			return false;
+		} else if(this.getAddresse() == null && candidat.getAddresse() != null) {
 			return false;
 		}
 		
-		if(this.getTelephone() == null || !this.getUtilisateur().equals(candidat.getUtilisateur())) {
+		/*if(this.getCandidatures() != null && !this.getCandidatures().equals(candidat.getCandidatures())) {
+			return false;
+		} else if(this.getCandidatures() == null && candidat.getCandidatures() != null) {
+			return false;
+		}*/
+		
+		/*if(this.getMessages() != null && !this.getMessages().equals(candidat.getMessages())) {
+			return false;
+		} else if(this.getMessages() == null && candidat.getMessages() != null) {
+			return false;
+		}*/
+		
+		if(this.getTelephone() != null && !this.getTelephone().equals(candidat.getTelephone())) {
+			return false;
+		} else if(this.getTelephone() == null && candidat.getTelephone() != null) {
 			return false;
 		}
+		
+		/*if(this.getUtilisateur() != null && !this.getUtilisateur().equals(candidat.getUtilisateur())) {
+			return false;
+		} else if(this.getUtilisateur() == null && candidat.getUtilisateur() != null) {
+			return false;
+		}*/
 		
 		return true;
 	}

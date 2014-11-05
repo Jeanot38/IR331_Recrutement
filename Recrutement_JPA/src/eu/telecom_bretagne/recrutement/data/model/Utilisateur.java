@@ -1,7 +1,9 @@
 package eu.telecom_bretagne.recrutement.data.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -134,23 +136,61 @@ public class Utilisateur implements Serializable {
 		
 		Utilisateur utilisateur = (Utilisateur) o;
 		
-		if(this.getId() == null && utilisateur.getId() != null || !this.getId().equals(utilisateur.getId())) {
+		if(this.getId() != null && !this.getId().equals(utilisateur.getId())) {
+			return false;
+		} else if(this.getId() == null && utilisateur.getId() != null) {
 			return false;
 		}
 		
-		if(this.getLogin() == null && utilisateur.getLogin() != null || !this.getLogin().equals(utilisateur.getLogin())) {
+		/*if(this.getCandidat() != null && !this.getCandidat().equals(utilisateur.getCandidat())) {
+			return false;
+		} else if(this.getCandidat() == null && utilisateur.getCandidat() != null) {
+			return false;
+		}*/
+		
+		/*if(this.getComiteEntretiens() != null && !this.getComiteEntretiens().equals(utilisateur.getComiteEntretiens())) {
+			return false;
+		} else if(this.getComiteEntretiens() == null && utilisateur.getComiteEntretiens() != null) {
+			return false;
+		}*/
+		
+		/*if(this.getDirecteur() != null && !this.getDirecteur().equals(utilisateur.getDirecteur())) {
+			return false;
+		} else if(this.getDirecteur() == null && utilisateur.getDirecteur() != null) {
+			return false;
+		}*/
+		
+		if(this.getLogin() != null && !this.getLogin().equals(utilisateur.getLogin())) {
+			return false;
+		} else if(this.getLogin() == null && utilisateur.getLogin() != null) {
 			return false;
 		}
 		
-		if(this.getNom() == null && utilisateur.getNom() != null || !this.getNom().equals(utilisateur.getNom())) {
+		if(this.getNom() != null && !this.getNom().equals(utilisateur.getNom())) {
+			return false;
+		} else if(this.getNom() == null && utilisateur.getNom() != null) {
 			return false;
 		}
 		
-		if(this.getPrenom() == null && utilisateur.getPrenom() != null || !this.getPrenom().equals(utilisateur.getPrenom())) {
+		if(this.getPassword() != null && !this.getPassword().equals(utilisateur.getPassword())) {
+			return false;
+		} else if(this.getPassword() == null && utilisateur.getPassword() != null) {
 			return false;
 		}
+		
+		if(this.getPrenom() != null && !this.getPrenom().equals(utilisateur.getPrenom())) {
+			return false;
+		} else if(this.getPrenom() == null && utilisateur.getPrenom() != null) {
+			return false;
+		}
+		
+		/*if(this.getServiceRh() != null && !this.getServiceRh().equals(utilisateur.getServiceRh())) {
+			return false;
+		} else if(this.getServiceRh() == null && utilisateur.getServiceRh() != null) {
+			return false;
+		}*/
 		
 		return true;
 	}
-
+	
 }
