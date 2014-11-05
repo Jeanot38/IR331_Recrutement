@@ -30,6 +30,7 @@ import eu.telecom_bretagne.recrutement.data.model.Entretien;
 import eu.telecom_bretagne.recrutement.data.model.Utilisateur;
 import eu.telecom_bretagne.recrutement.exception.BadParameterException;
 import eu.telecom_bretagne.recrutement.exception.BadStateException;
+import eu.telecom_bretagne.recrutement.exception.InvalidUserException;
 import eu.telecom_bretagne.recrutement.service.IServiceComiteEntretien;
 import eu.telecom_bretagne.recrutement.service.IServiceCommon;
 import eu.telecom_bretagne.recrutement.service.IServiceDirecteur;
@@ -698,17 +699,16 @@ public class TestServiceEmployes {
 		assertEquals(nombreMessage+1, serviceCommon.getListMessages().size());
 	}
 	
-	/*@Test
-	public void testValideEntretien() {
+	@Test
+	public void testValideEntretienUtilisateurNull() {
 		IServiceCommon serviceCommon = this.getServiceCommon();
 		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
 		
-		int nombreMessage = serviceCommon.getListMessages().size();
-		
-		Candidature candidature = serviceCommon.findCandidatureById(2);
+		Entretien entretien = serviceCommon.findEntretienById(1);
+		Utilisateur utilisateur = entretien.getComiteEntretien().getUtilisateurs().get(0);
 		
 		try {
-			serviceComiteEntretien.valideEntretien(users, entretien)
+			serviceComiteEntretien.valideEntretien(null, entretien);
 		} catch (BadParameterException e) {
 			
 		} catch (Exception e) {
@@ -719,8 +719,98 @@ public class TestServiceEmployes {
 			
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
-		assertEquals(nombreMessage, serviceCommon.getListMessages().size());
-	}*/
+		assertEquals("cree", serviceCommon.findEntretienById(1).getEtat());
+	}
+	
+	@Test
+	public void testValideEntretienEntretienNull() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(1);
+		Utilisateur utilisateur = entretien.getComiteEntretien().getUtilisateurs().get(0);
+		
+		try {
+			serviceComiteEntretien.valideEntretien(utilisateur, null);
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("cree", serviceCommon.findEntretienById(1).getEtat());
+	}
+	
+	@Test
+	public void testValideEntretienBadState() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(2);
+		Utilisateur utilisateur = entretien.getComiteEntretien().getUtilisateurs().get(0);
+		
+		try {
+			serviceComiteEntretien.valideEntretien(utilisateur, entretien);
+		} catch (BadStateException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadStateException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("cree", serviceCommon.findEntretienById(1).getEtat());
+	}
+	
+	@Test
+	public void testValideEntretienBadUser() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(1);
+		Utilisateur utilisateur = serviceCommon.findUtilisateurById(1);
+		
+		try {
+			serviceComiteEntretien.valideEntretien(utilisateur, entretien);
+		} catch (InvalidUserException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("InvalidUserException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("cree", serviceCommon.findEntretienById(1).getEtat());
+	}
+	
+	@Test
+	public void testValideEntretienValide() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceComiteEntretien serviceComiteEntretien = this.getServiceComiteEntretien();
+		
+		Entretien entretien = serviceCommon.findEntretienById(1);
+		Utilisateur utilisateur = entretien.getComiteEntretien().getUtilisateurs().get(0);
+		
+		try {
+			serviceComiteEntretien.valideEntretien(utilisateur, entretien);
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("No exception should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("valide_comite_entretien", serviceCommon.findEntretienById(1).getEtat());
+	}
 	
 	@Test
 	public void testDonnerAvisEntretienNull() {
@@ -743,7 +833,7 @@ public class TestServiceEmployes {
 			
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
-		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+		assertTrue("Un vote a été ajouté alors qu'il n'aurait pas du", serviceCommon.findEntretienById(2).getVote() == null);
 	}
 	
 	@Test
@@ -767,7 +857,7 @@ public class TestServiceEmployes {
 			
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
-		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+		assertTrue("Un vote a été ajouté alors qu'il n'aurait pas du", serviceCommon.findEntretienById(2).getVote() == null);
 	}
 	
 	@Test
@@ -791,7 +881,7 @@ public class TestServiceEmployes {
 			
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
-		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+		assertTrue("Un vote a été ajouté alors qu'il n'aurait pas du", serviceCommon.findEntretienById(2).getVote() == null);
 	}
 	
 	@Test
@@ -839,7 +929,7 @@ public class TestServiceEmployes {
 			
 			fail("BadStateException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
-		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+		assertTrue("Un vote a été ajouté alors qu'il n'aurait pas du", serviceCommon.findEntretienById(2).getVote() == null);
 	}
 	
 	@Test
@@ -851,8 +941,6 @@ public class TestServiceEmployes {
 		int note = 14;
 		String commentaire = "Commentaires super utiles";
 		
-		System.out.println("Etat entretien"+entretien.getEtat());
-		
 		try {
 			serviceComiteEntretien.donnerAvis(entretien, note, commentaire);
 		} catch (Exception e) {
@@ -863,7 +951,7 @@ public class TestServiceEmployes {
 			
 			fail("No Exception should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
-		assertTrue(serviceCommon.findEntretienById(2).getVote() != null);
+		assertTrue("Le vote n'a pas été ajouté alors qu'il aurait du", serviceCommon.findEntretienById(2).getVote() != null);
 	}
 	
 	

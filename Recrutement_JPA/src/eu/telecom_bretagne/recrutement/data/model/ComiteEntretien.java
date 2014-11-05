@@ -29,7 +29,7 @@ public class ComiteEntretien implements Serializable {
 	private List<Entretien> entretiens;
 
 	//bi-directional many-to-many association to Utilisateur
-	@ManyToMany(mappedBy="comiteEntretiens")
+	@ManyToMany(mappedBy="comiteEntretiens", fetch=FetchType.EAGER)
 	private List<Utilisateur> utilisateurs;
 
 	public ComiteEntretien() {

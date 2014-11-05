@@ -28,7 +28,7 @@ public class VoteMngt implements DAO<Vote> {
     		throw new BadParameterException("Les commentaires de l'avis doivent être renseignés");
     	}
     	
-    	if(entity.getNote() < 0 && entity.getNote() > 20) {
+    	if(entity.getNote() == null) {
     		throw new BadParameterException("La note de l'avis doit être renseigné");
     	}
     	
