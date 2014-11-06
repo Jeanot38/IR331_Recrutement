@@ -28,7 +28,11 @@ public class CandidatureMngt implements DAO<Candidature> {
 		if(entity.getCv() == null || entity.getCv().equals("")) {
     		throw new BadParameterException("Le contenu du CV ne peut être nul");
     	}
-    	
+		
+		if(entity.getEtat() == null || entity.getEtat().equals("")) {
+    		throw new BadParameterException("L'etat ne peut être nul");
+    	}
+		
     	if(entity.getLettreMotivation() == null || entity.getLettreMotivation().equals("")) {
     		throw new BadParameterException("Le contenu de la lettre de motivation ne peut être nul");
     	}
@@ -63,6 +67,10 @@ public class CandidatureMngt implements DAO<Candidature> {
     		throw new BadParameterException("Le contenu du CV ne peut être nul");
     	}
     	
+		if(entity.getEtat() == null || entity.getEtat().equals("")) {
+    		throw new BadParameterException("L'etat ne peut être nul");
+    	}
+		
     	if(entity.getLettreMotivation() == null || entity.getLettreMotivation() == "") {
     		throw new BadParameterException("Le contenu de la lettre de motivation ne peut être nul");
     	}
