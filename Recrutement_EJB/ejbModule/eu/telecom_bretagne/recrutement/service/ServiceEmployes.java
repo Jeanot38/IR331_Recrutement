@@ -185,12 +185,16 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	if ((entretien.getCandidature().getEtat().equalsIgnoreCase("valide")) && (entretien.getEtat().equalsIgnoreCase("accepte"))){
     		throw new BadStateException("Cet entretien n'est pas valide.");
     	}
+    	
     	Vote vote = new Vote();
-		vote.setEntretien(entretien);
 		
+    	vote.setEntretien(entretien);
     	vote.setNote(note);
     	vote.setCommentaires(commentaire);
-    	return voteDAO.update(vote);  	
+    	vote.setId(entretien.getId());
+    	
+    	return vote;
+    	
     }
     
     public Candidature validerCandidature(Candidature candidature, String resultat) throws BadStateException, BadParameterException{

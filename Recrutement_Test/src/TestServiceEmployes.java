@@ -998,7 +998,7 @@ public class TestServiceEmployes {
 	}
 
 	@Test
-	public void testValiderCandidatureResultatEmpty() {
+	public void testValiderCandidatureBadResultat() {
 		IServiceCommon serviceCommon = this.getServiceCommon();
 		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
 		
@@ -1006,7 +1006,7 @@ public class TestServiceEmployes {
 		String resultat = "accepte";
 		
 		try {
-			serviceDirecteur.validerCandidature(candidature, "");
+			serviceDirecteur.validerCandidature(candidature, "coucou");
 		} catch (BadParameterException e) {
 			
 		} catch (Exception e) {
@@ -1053,7 +1053,7 @@ public class TestServiceEmployes {
 		
 		try {
 			serviceDirecteur.validerCandidature(candidature, resultat);
-		} catch (BadStateException e) {
+		} catch (BadParameterException e) {
 			
 		} catch (Exception e) {
 			StringWriter writer = new StringWriter();
@@ -1061,7 +1061,7 @@ public class TestServiceEmployes {
 			e.printStackTrace( printWriter);
 			printWriter.flush();
 			
-			fail("BadState should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
 		assertEquals("valide", serviceCommon.findCandidatureById(4).getEtat());
 	}
@@ -1076,7 +1076,7 @@ public class TestServiceEmployes {
 		
 		try {
 			serviceDirecteur.validerCandidature(candidature, resultat);
-		} catch (BadStateException e) {
+		} catch (BadParameterException e) {
 			
 		} catch (Exception e) {
 			StringWriter writer = new StringWriter();
@@ -1084,7 +1084,7 @@ public class TestServiceEmployes {
 			e.printStackTrace( printWriter);
 			printWriter.flush();
 			
-			fail("BadState should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
 		assertEquals("valide", serviceCommon.findCandidatureById(3).getEtat());
 	}
@@ -1099,7 +1099,6 @@ public class TestServiceEmployes {
 		
 		try {
 			serviceDirecteur.validerCandidature(candidature, resultat);
-			System.out.println("Etat : "+serviceCommon.findCandidatureById(5).getEtat());
 		} catch (Exception e) {
 			StringWriter writer = new StringWriter();
 			PrintWriter printWriter = new PrintWriter( writer );
