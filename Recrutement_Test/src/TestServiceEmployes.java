@@ -262,8 +262,6 @@ public class TestServiceEmployes {
 			fail("BadStateException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
 		
-		assertEquals("cree", serviceCommon.findCandidatureById(2).getEtat());
-		
 	}
 	
 	@Test
@@ -905,7 +903,7 @@ public class TestServiceEmployes {
 			
 			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
-		assertTrue(serviceCommon.findEntretienById(2).getVote() == null);
+		assertTrue("Un vote a été ajouté alors qu'il n'aurait pas du", serviceCommon.findEntretienById(2).getVote() == null);
 	}
 	
 	@Test
@@ -918,7 +916,7 @@ public class TestServiceEmployes {
 		String commentaire = "Commentaires super utiles";
 		
 		try {
-			serviceComiteEntretien.donnerAvis(entretien, note, null);
+			serviceComiteEntretien.donnerAvis(entretien, note, commentaire);
 		} catch (BadStateException e) {
 			
 		} catch (Exception e) {
@@ -952,6 +950,166 @@ public class TestServiceEmployes {
 			fail("No Exception should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
 		assertTrue("Le vote n'a pas été ajouté alors qu'il aurait du", serviceCommon.findEntretienById(2).getVote() != null);
+	}
+	
+	@Test
+	public void testValiderCandidatureCandidatureNull() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(5);
+		String resultat = "accepte";
+		
+		try {
+			serviceDirecteur.validerCandidature(null, resultat);
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("valide", serviceCommon.findCandidatureById(5).getEtat());
+	}
+	
+	@Test
+	public void testValiderCandidatureResultatNull() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(5);
+		String resultat = "accepte";
+		
+		try {
+			serviceDirecteur.validerCandidature(candidature, null);
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("valide", serviceCommon.findCandidatureById(5).getEtat());
+	}
+
+	@Test
+	public void testValiderCandidatureResultatEmpty() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(5);
+		String resultat = "accepte";
+		
+		try {
+			serviceDirecteur.validerCandidature(candidature, "");
+		} catch (BadParameterException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadParameterException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("valide", serviceCommon.findCandidatureById(5).getEtat());
+	}
+	
+	@Test
+	public void testValiderCandidatureBadState() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(1);
+		String resultat = "accepte";
+		
+		try {
+			serviceDirecteur.validerCandidature(candidature, resultat);
+		} catch (BadStateException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadState should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("valide", serviceCommon.findCandidatureById(1).getEtat());
+	}
+	
+	@Test
+	public void testValiderCandidatureEntretienNull() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(4);
+		String resultat = "accepte";
+		
+		try {
+			serviceDirecteur.validerCandidature(candidature, resultat);
+		} catch (BadStateException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadState should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("valide", serviceCommon.findCandidatureById(4).getEtat());
+	}
+	
+	@Test
+	public void testValiderCandidatureVoteNull() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(3);
+		String resultat = "accepte";
+		
+		try {
+			serviceDirecteur.validerCandidature(candidature, resultat);
+		} catch (BadStateException e) {
+			
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("BadState should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("valide", serviceCommon.findCandidatureById(3).getEtat());
+	}
+	
+	@Test
+	public void testValiderCandidatureValide() {
+		IServiceCommon serviceCommon = this.getServiceCommon();
+		IServiceDirecteur serviceDirecteur = this.getServiceDirecteur();
+		
+		Candidature candidature = serviceCommon.findCandidatureById(5);
+		String resultat = "accepte";
+		
+		try {
+			serviceDirecteur.validerCandidature(candidature, resultat);
+			System.out.println("Etat : "+serviceCommon.findCandidatureById(5).getEtat());
+		} catch (Exception e) {
+			StringWriter writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter( writer );
+			e.printStackTrace( printWriter);
+			printWriter.flush();
+			
+			fail("No exception should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
+		}
+		assertEquals("accepte", serviceCommon.findCandidatureById(5).getEtat());
 	}
 	
 	
