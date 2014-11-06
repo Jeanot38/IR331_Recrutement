@@ -182,7 +182,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	if (note<0 || note>20){
     		throw new BadParameterException("Veuillez entrer une note comprise entre 0 et 20.");
     	}
-    	if ((entretien.getCandidature().getEtat().equalsIgnoreCase("valide")) && (entretien.getEtat().equalsIgnoreCase("accepte"))){
+    	if (!(entretien.getCandidature().getEtat().equalsIgnoreCase("valide")) && (entretien.getEtat().equalsIgnoreCase("accepte"))){
     		throw new BadStateException("Cet entretien n'est pas valide.");
     	}
     	Vote vote = new Vote();
@@ -194,6 +194,15 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     }
     
     public Candidature validerCandidature(Candidature candidature, String resultat) throws BadStateException, BadParameterException{
+    	if(candidature==null){
+    		throw new BadParameterException("La candidature est vide.");
+    	}
+    	if(resultat==null){
+    		throw new BadParameterException("Merci de choisir sur la candidature est acceptee ou refusee.");
+    	}
+    	if(candidature.getEntretiens().size()<=0){
+    		throw new BadParameterException("Ancun entretien n'est renseigne pour cette candidature.");
+    	}
     	if (!candidature.getEtat().equalsIgnoreCase("valide")){
     		throw new BadStateException("Cette candidature n'est pas valide.");
     	}
