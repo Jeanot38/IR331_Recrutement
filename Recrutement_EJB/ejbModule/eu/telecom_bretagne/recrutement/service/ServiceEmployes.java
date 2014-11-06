@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 
 import eu.telecom_bretagne.recrutement.data.dao.ComiteEntretienMngt;
 import eu.telecom_bretagne.recrutement.data.dao.EntretienMngt;
+import eu.telecom_bretagne.recrutement.data.dao.VoteMngt;
 import eu.telecom_bretagne.recrutement.data.dao.MessageMngt;
 import eu.telecom_bretagne.recrutement.data.dao.CandidatureMngt;
 import eu.telecom_bretagne.recrutement.data.dao.UtilisateurMngt;
@@ -45,6 +46,9 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
 	
 	@EJB
 	ComiteEntretienMngt comiteEntretienDAO;
+	
+	@EJB
+	VoteMngt voteDAO;
 
     /**
      * Default constructor. 
@@ -60,6 +64,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	if (!candidature.getEtat().equalsIgnoreCase("cree")){
     		throw new BadStateException("La candidature n'est pas créée.");
     	}
+    	
     	if (etat==null){
     		throw new BadParameterException("L'état de la candidature n'est pas renseigné.");
     	}
@@ -98,10 +103,10 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     
     public Entretien proposerDateEntretien(Candidature candidature, List <Utilisateur> users, Date dateEntretien) throws BadStateException, BadParameterException{
     	if (candidature==null){
-    		throw new BadStateException("Erreur, la candidature n'est pas remplie.");
+    		throw new BadParameterException("Erreur, la candidature n'est pas remplie.");
     	}
     	if(users==null){
-    		throw new BadStateException("La liste d'utilisateur est vide.");
+    		throw new BadParameterException("La liste d'utilisateur est vide.");
     	}
     	if(!candidature.getEtat().equalsIgnoreCase("valide")){
     		throw new BadStateException("La candidature n'est pas validée, impossible de proposer une date.");
@@ -135,8 +140,12 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	}
     
     public Entretien valideEntretien(Utilisateur user, Entretien entretien) throws InvalidUserException,BadStateException,BadParameterException {
-    	
-    	
+    	if(user==null){
+    		throw new BadParameterException("Utilisateur mal renseigné.");
+    	}
+    	if(entretien==null){
+    		throw new BadParameterException("Audun entretien n'est renseigné.");
+    	}    	
     	if(!entretien.getComiteEntretien().getUtilisateurs().contains(user)) {
     		throw new InvalidUserException("Vous ne pouvez pas valider car vous ne faites pas parti du comité de cet entretien.");
     	}
@@ -164,33 +173,39 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     }
     
     public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException,BadParameterException{
-    	if ((entretien.getCandidature().getEtat().equalsIgnoreCase("valide")) && (entretien.getEtat().equalsIgnoreCase("accepte"))){
-    		throw new BadStateException("Cet entretien n'est pas valide.");
+    	if(entretien==null){
+    		throw new BadParameterException("Aucun entretien n'est sélectionné.");
+    	}
+    	if(commentaire==null){
+    		throw new BadParameterException("Merci d'inscrire votre commentaire.");
     	}
     	if (note<0 || note>20){
     		throw new BadParameterException("Veuillez entrer une note comprise entre 0 et 20.");
     	}
-    	if(entretien==null){
-    		throw new BadParameterException("Aucun entretien n'est sélectionné.");
+    	if ((entretien.getCandidature().getEtat().equalsIgnoreCase("valide")) && (entretien.getEtat().equalsIgnoreCase("accepte"))){
+    		throw new BadStateException("Cet entretien n'est pas valide.");
     	}
     	Vote vote = new Vote();
 		vote.setEntretien(entretien);
+		
     	vote.setNote(note);
     	vote.setCommentaires(commentaire);
-    	return vote;  	
+    	return voteDAO.update(vote);  	
     }
     
     public Candidature validerCandidature(Candidature candidature, String resultat) throws BadStateException, BadParameterException{
-    	if (!candidature.getEtat().equalsIgnoreCase("valide")){ //Ajouter une condition sur le vote reçu ? Un test...
+    	if (!candidature.getEtat().equalsIgnoreCase("valide")){
     		throw new BadStateException("Cette candidature n'est pas valide.");
     	}
     		switch (resultat){
     		case "accepte" :
     			candidature.setEtat("accepte");
+    			break;
     		case "refuse" :
     			candidature.setEtat("refuse");
+    			break;
     		default :
-    			System.out.println("Etat de candidature invalide.");
+    			throw new BadStateException("Le resultat n'a pas le bon format.");
     		}
     		return candidatureDAO.update(candidature);
     }
