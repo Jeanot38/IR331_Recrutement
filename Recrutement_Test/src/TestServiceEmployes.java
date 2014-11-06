@@ -55,7 +55,7 @@ public class TestServiceEmployes {
 		        String DBurl = "jdbc:postgresql://localhost:54321/recrutement";
 		        connectionBase = DriverManager.getConnection(DBurl, "postgres", "postgres" );
 		     } catch (Exception e) {
-		        throw new Exception("Connection Ã  la base de donnÃ©es impossible" );
+		        throw new Exception("Connection Ã  la base de donnees impossible" );
 	     }
 	}
 	
@@ -248,7 +248,6 @@ public class TestServiceEmployes {
 		IServiceRH serviceRH = this.getServiceRH();
 		
 		Candidature candidature = serviceCommon.findCandidatureById(2);
-		
 		try {
 			serviceRH.etudierCandidature(candidature, "refuse");
 		} catch (BadStateException e) {
