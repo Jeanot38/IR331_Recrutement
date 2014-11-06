@@ -116,7 +116,7 @@ public class ServiceCandidats implements IServiceCandidats {
     		throw new InvalidUserException("Vous n'êtes pas autoriser à annuler une candidature qui ne vous appartient pas");
     	}
     	
-    	if(candidature.getEtat() == "cree" || candidature.getEtat() == "accepte" || candidature.getEtat() == "refuse") {
+    	if(candidature.getEtat().equalsIgnoreCase("cree") || candidature.getEtat().equalsIgnoreCase("accepte") || candidature.getEtat().equalsIgnoreCase("refuse")) {
     		throw new BadStateException("L'état actuel de votre candidature ne vous permet pas de l'annuler");
     	}
     	

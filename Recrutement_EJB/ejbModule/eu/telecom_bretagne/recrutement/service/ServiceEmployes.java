@@ -173,6 +173,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     }
     
     public Vote donnerAvis(Entretien entretien, int note, String commentaire ) throws BadStateException,BadParameterException{
+    	
     	if(entretien==null){
     		throw new BadParameterException("Aucun entretien n'est sélectionné.");
     	}
@@ -193,7 +194,7 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	vote.setCommentaires(commentaire);
     	vote.setId(entretien.getId());
     	
-    	return vote;
+    	return voteDAO.create(vote);
     	
     }
     
@@ -204,22 +205,26 @@ public class ServiceEmployes implements IServiceDirecteur, IServiceRH, IServiceC
     	if(resultat==null){
     		throw new BadParameterException("Merci de choisir sur la candidature est acceptee ou refusee.");
     	}
-    	if(candidature.getEntretiens().size()<=0){
-    		throw new BadParameterException("Ancun entretien n'est renseigne pour cette candidature.");
-    	}
+    	
     	if (!candidature.getEtat().equalsIgnoreCase("valide")){
     		throw new BadStateException("Cette candidature n'est pas valide.");
     	}
-    		switch (resultat){
-    		case "accepte" :
-    			candidature.setEtat("accepte");
-    			break;
-    		case "refuse" :
-    			candidature.setEtat("refuse");
-    			break;
-    		default :
-    			throw new BadStateException("Le resultat n'a pas le bon format.");
-    		}
-    		return candidatureDAO.update(candidature);
+    	
+    	if(candidature.getEntretiens().size()<=0){
+    		throw new BadParameterException("Ancun entretien n'est renseigne pour cette candidature.");
+    	}
+    		
+    	switch (resultat){
+		case "accepte" :
+			candidature.setEtat("accepte");
+			break;
+		case "refuse" :
+			candidature.setEtat("refuse");
+			break;
+		default :
+			throw new BadStateException("Le resultat n'a pas le bon format.");
+		}
+    	
+		return candidatureDAO.update(candidature);
     }
 }

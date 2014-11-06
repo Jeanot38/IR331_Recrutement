@@ -513,7 +513,7 @@ public class TestServiceCandidat {
 			fail("BadStateException should be catch, "+e.getClass()+" is the real.\n"+writer.toString());
 		}
 		
-		assertEquals("valide", serviceCommon.findCandidatureById(1).getEtat());
+		assertEquals("cree", serviceCommon.findCandidatureById(1).getEtat());
 		
 	}
 	
